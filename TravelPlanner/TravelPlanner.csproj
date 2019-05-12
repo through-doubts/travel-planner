@@ -41,6 +41,12 @@
     <Reference Include="MetroFramework.Fonts, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
       <HintPath>packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Fonts.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>.\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunitlite">
+      <HintPath>.\nunitlite.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Device" />
@@ -55,9 +61,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Place.cs" />
+    <Compile Include="Application\IApplication.cs" />
+    <Compile Include="Application\IDataProvider.cs" />
+    <Compile Include="Application\MainApplication.cs" />
+    <Compile Include="Application\Tests\MainApplication_should.cs" />
+    <Compile Include="Application\User.cs" />
+    <Compile Include="Domain\Housing.cs" />
+    <Compile Include="Domain\ITravelEvent.cs" />
+    <Compile Include="Domain\Location.cs" />
     <Compile Include="Domain\Route.cs" />
+    <Compile Include="Domain\Transfer.cs" />
     <Compile Include="Domain\Travel.cs" />
+    <Compile Include="Infrastructure\Currency.cs" />
+    <Compile Include="Infrastructure\Money.cs" />
+    <Compile Include="Infrastructure\DateTimeInterval.cs" />
     <Compile Include="Infrastructure\Entity.cs" />
     <Compile Include="Infrastructure\ValueType.cs" />
     <Compile Include="UserInterface\AddForm.cs">
@@ -96,7 +113,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Application\" />
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

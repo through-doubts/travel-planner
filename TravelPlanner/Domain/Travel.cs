@@ -3,14 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravelPlanner.Infrastructure;
 
 namespace TravelPlanner.Domain
 {
-    class Travel
+    public class Travel : Entity<int>
     {
-        // локации, которые нужно посетить Value Type
-        // рут -- порядок посещения этих локаций с перемещениями
-        // список отелей (или квартир и т.д.) для каждой локации
-        // айди, имя
+        private List<ITravelEvent> events;
+
+        public Travel(int id) : base(id)
+        {
+            events = new List<ITravelEvent>();
+        }
+
+        public void AddEvent(ITravelEvent travelEvent)
+        {
+            events.Add(travelEvent);
+        }
     }
 }
