@@ -8,12 +8,12 @@ using TravelPlanner.Infrastructure;
 
 namespace TravelPlanner.Domain
 {
-    public class Place : ValueType<Place>
+    public class Location : ValueType<Location>
     {
         public GeoCoordinate Coordinate { get; }
         public string Name { get; }
 
-        public Place(GeoCoordinate coordinate, string name)
+        public Location(GeoCoordinate coordinate, string name)
         {
             Coordinate = coordinate;
             Name = name;
