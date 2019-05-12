@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Windows.Forms;
 using MetroFramework.Forms;
 
 namespace TravelPlanner.UserInterface
@@ -8,18 +9,18 @@ namespace TravelPlanner.UserInterface
         public PathForm()
         {
             Size = new Size(600, 600);
-            AddAddButton();
+            GetAddButton();
+            ShadowType = MetroFormShadowType.None;
+            Controls.Add(GetAddButton());
         }
 
-        private void AddAddButton()
+        private Button GetAddButton()
         {
-            var addButton = Elements.GetBottomButton("Добавить событие");
-            addButton.Click += (sender, args) =>
+            return Elements.GetBottomButton("Добавить событие", (sender, args) =>
             {
                 var addForm = new AddForm();
                 addForm.Show(this);
-            };
-            Controls.Add(addButton);
+            });
         }
     }
 }

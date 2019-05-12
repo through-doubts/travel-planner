@@ -22,15 +22,20 @@ namespace TravelPlanner.UserInterface
             Enabled = false
         };
 
-        public static Button GetBottomButton(string text) => new Button
+        public static Button GetBottomButton(string text, EventHandler onClick)
         {
-            Text = text,
-            BackColor = Color.Transparent,
-            FlatStyle = FlatStyle.Flat,
-            FlatAppearance = { BorderSize = 0 },
-            Dock = DockStyle.Bottom,
-            AutoSize = true
-        };
+            var button = new Button
+            {
+                Text = text,
+                BackColor = Color.Transparent,
+                FlatStyle = FlatStyle.Flat,
+                FlatAppearance = { BorderSize = 0 },
+                Dock = DockStyle.Bottom,
+                AutoSize = true
+            };
+            button.Click += onClick;
+            return button;
+        }
 
         public static DateTimePicker GeTimePicker() => new DateTimePicker
         {
