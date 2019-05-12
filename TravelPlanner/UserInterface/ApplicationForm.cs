@@ -9,18 +9,18 @@ namespace TravelPlanner.UserInterface
         public ApplicationForm()
         {
             Size = new Size(800, 600);
-            AddAddButton();
+            GetAddButton();
+            ShadowType = MetroFormShadowType.None;
+            Controls.Add(GetAddButton());
         }
 
-        private void AddAddButton()
+        private Button GetAddButton()
         {
-            var addButton = Elements.GetBottomButton("Добавить");
-            addButton.Click += (sender, args) =>
+            return Elements.GetBottomButton("Добавить", (sender, args) =>
             {
                 var createPathForm = new PathForm();
                 createPathForm.Show(this);
-            };
-            Controls.Add(addButton);
+            });
         }
 
     }
