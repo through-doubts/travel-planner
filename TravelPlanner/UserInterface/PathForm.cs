@@ -1,26 +1,38 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using TravelPlanner.Application;
+using TravelPlanner.Domain;
 
 namespace TravelPlanner.UserInterface
 {
     class PathForm : MetroForm
     {
-        public PathForm()
+        private readonly IApplication app;
+        private readonly Travel travel;
+
+        public PathForm(IApplication app, Travel travel)
         {
+            this.app = app;
+            this.travel = travel;
             Size = new Size(600, 600);
-            GetAddButton();
             ShadowType = MetroFormShadowType.None;
             Controls.Add(GetAddButton());
         }
 
+        public PathForm(IApplication app) : this(app, null)
+        {
+        }
+
         private Button GetAddButton()
         {
-            return Elements.GetBottomButton("Добавить событие", (sender, args) =>
+            var addButton = Elements.GetButton("Добавить событие", (sender, args) =>
             {
-                var addForm = new AddForm();
+                var addForm = new AddForm(app);
                 addForm.Show(this);
             });
+            addButton.Dock = DockStyle.Bottom;
+            return addButton;
         }
     }
 }

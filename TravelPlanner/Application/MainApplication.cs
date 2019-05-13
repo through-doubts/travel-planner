@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TravelPlanner.Domain;
+using TravelPlanner.Infrastructure;
 
 namespace TravelPlanner.Application
 {
@@ -45,6 +46,16 @@ namespace TravelPlanner.Application
             return travelEvents.Select(e => e.Name).OrderBy(n => n).ToList();
         }
 
+        public ITravelEvent GetEvent(string name, DateTime startDate, DateTime endDate, decimal amountOfMoney, string currency,
+            string eventSubType)
+        {
+            var interval = new DateTimeInterval(startDate, endDate);
+            var parsedCurrency = (Currency)Enum.Parse(typeof(Currency), currency);
+            var money = new Money(parsedCurrency, amountOfMoney);
+            var parsedEventSubType = Enum.Parse(EventTypes[name], eventSubType);
+            return GetEvent(name, interval, money, parsedEventSubType);
+        }
+
         public ITravelEvent GetEvent(string name, params object[] parameters)
         {
             var foundEvent = travelEvents.FirstOrDefault(e => e.Name == name);
@@ -65,5 +76,11 @@ namespace TravelPlanner.Application
         {
             return currentUser.GetTravels();
         }
+
+        public Dictionary<string, Type> EventTypes => new Dictionary<string, Type>
+        {
+            { "Жилье", typeof(HousingType) },
+            { "Перемещение", typeof(TransferType) },
+        };
     }
 }

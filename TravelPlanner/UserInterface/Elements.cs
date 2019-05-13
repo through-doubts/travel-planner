@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using MetroFramework.Controls;
 
 namespace TravelPlanner.UserInterface
 {
     class Elements
     {
-        public static ComboBox TypeBox() => new ComboBox
+        public static ComboBox TypeBox(object dataSource) => new MetroComboBox
         {
-            Dock = DockStyle.Fill
+            Dock = DockStyle.Fill,
+            DataSource = dataSource,
+            DropDownStyle = ComboBoxStyle.DropDownList
         };
 
         public static TextBox GetLabel(string text) => new TextBox
@@ -22,7 +21,7 @@ namespace TravelPlanner.UserInterface
             Enabled = false
         };
 
-        public static Button GetBottomButton(string text, EventHandler onClick)
+        public static Button GetButton(string text, EventHandler onClick)
         {
             var button = new Button
             {
@@ -30,8 +29,7 @@ namespace TravelPlanner.UserInterface
                 BackColor = Color.Transparent,
                 FlatStyle = FlatStyle.Flat,
                 FlatAppearance = { BorderSize = 0 },
-                Dock = DockStyle.Bottom,
-                AutoSize = true
+                AutoSize = true,
             };
             button.Click += onClick;
             return button;
