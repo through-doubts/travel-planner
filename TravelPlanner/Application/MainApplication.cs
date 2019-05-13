@@ -10,7 +10,7 @@ namespace TravelPlanner.Application
 {
     public class MainApplication : IApplication
     {
-        private ITravelEvent[] travelEvents;
+        private readonly ITravelEvent[] travelEvents;
         private List<User> users;
         private int currentUserId;
         private User currentUser;
@@ -19,6 +19,7 @@ namespace TravelPlanner.Application
         {
             this.travelEvents = travelEvents;
             users = new List<User>();
+            AddUser();
         }
 
         public void AddUser() // срабатывает мб при нажатии какой-нибудь кнопочки
@@ -60,7 +61,9 @@ namespace TravelPlanner.Application
             return (ITravelEvent)constructor.Invoke(parameters);
         }
 
-
-
+        public List<Travel> GetTravels()
+        {
+            return currentUser.GetTravels();
+        }
     }
 }

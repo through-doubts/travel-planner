@@ -10,7 +10,7 @@ namespace TravelPlanner.Application
 {
     public class User : Entity<int>
     {
-        private List<Travel> travels;
+        private readonly List<Travel> travels;
         private Travel currentTravel;
         private int currentTravelId;
 
@@ -30,6 +30,11 @@ namespace TravelPlanner.Application
         public void AddEvent(ITravelEvent travelEvent)
         {
             currentTravel.AddEvent(travelEvent);
+        }
+
+        public List<Travel> GetTravels()
+        {
+            return new List<Travel>(travels);
         }
     }
 }
