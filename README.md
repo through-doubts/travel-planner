@@ -7,4 +7,5 @@ https://github.com/off-color/travel-planner/tree/master/TravelPlanner/Domain
 Экспорт в различные форматы (таблицы например) – чтобы можно было взять с собой.
 Получение разной информации с сайтов – например картинки жилья.
 ## Место сборки DI-контейнера
-soon
+https://github.com/off-color/travel-planner/blob/master/TravelPlanner/Program.cs
+метод GetApplication()
