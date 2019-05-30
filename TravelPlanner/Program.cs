@@ -16,11 +16,18 @@ namespace TravelPlanner
         {
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-            System.Windows.Forms.Application.Run(new ApplicationForm(new MainApplication(new ITravelEvent[]
+            System.Windows.Forms.Application.Run(new ApplicationForm(GetApplication()));
+        }
+
+        static IApplication GetApplication()
+        {
+            var eventHandler = new TravelEventHandler(new ITravelEvent[]
             {
                 new Housing(),
                 new Transfer(),
-            })));
+            });
+
+            return new MainApplication(eventHandler);
         }
     }
 }

@@ -19,12 +19,23 @@ namespace TravelPlanner.Application
             travels = new List<Travel>();
         }
 
-        public void AddTravel()
+        public void AddTravel(string travelName)
         {
-            var travel = new Travel(currentTravelId);
+            var travel = new Travel(currentTravelId, travelName);
             currentTravelId++;
             travels.Add(travel);
             currentTravel = travel;
+        }
+
+        public void ChangeCurrentTravel(string travelName)
+        {
+            var travel = travels.FirstOrDefault(t => t.Name == travelName);
+            currentTravel = travel;
+        }
+
+        public List<ITravelEvent> GetTravelEvents()
+        {
+            return currentTravel.GetTravelEvents();
         }
 
         public void AddEvent(ITravelEvent travelEvent)

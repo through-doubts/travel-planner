@@ -9,16 +9,23 @@ namespace TravelPlanner.Domain
 {
     public class Travel : Entity<int>
     {
-        private List<ITravelEvent> events;
+        private readonly List<ITravelEvent> events;
+        public string Name { get; }
 
-        public Travel(int id) : base(id)
+        public Travel(int id, string name) : base(id)
         {
             events = new List<ITravelEvent>();
+            Name = name;
         }
 
         public void AddEvent(ITravelEvent travelEvent)
         {
             events.Add(travelEvent);
+        }
+
+        public List<ITravelEvent> GetTravelEvents()
+        {
+            return new List<ITravelEvent>(events);
         }
     }
 }

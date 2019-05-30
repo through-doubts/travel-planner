@@ -11,15 +11,11 @@ namespace TravelPlanner.Application
 {
     interface IApplication
     {
+        IEventHandler EventHandler { get; }
+
         void AddUser();
-        void AddTravel();
+        void AddTravel(string travelName);
         void AddEvent(ITravelEvent travelEvent);
-        List<string> GetEventsNames();
-
-        ITravelEvent GetEvent(string name, DateTime startDate, DateTime endDate, decimal amountOfMoney,
-            string currency, string eventSubType);
         List<Travel> GetTravels();
-
-        Dictionary<string, Type> EventTypes { get; }
     }
 }

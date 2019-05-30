@@ -24,11 +24,12 @@ namespace TravelPlanner.UserInterface
             ShadowType = MetroFormShadowType.None;
             startPicker = Elements.GeTimePicker();
             endPicker = Elements.GeTimePicker();
-            eventTypeBox = Elements.TypeBox(app.GetEventsNames());
-            subEventTypeBox = Elements.TypeBox(Enum.GetNames(app.EventTypes[app.GetEventsNames()[0]]));
+            eventTypeBox = Elements.TypeBox(app.EventHandler.GetEventsNames());
+            subEventTypeBox =
+                Elements.TypeBox(Enum.GetNames(app.EventHandler.GetEventSubType(app.EventHandler.GetEventsNames()[0])));
             eventTypeBox.SelectedIndexChanged += (sender, args) =>
             {
-                subEventTypeBox.DataSource = Enum.GetNames(this.app.EventTypes[eventTypeBox.Text]);
+                subEventTypeBox.DataSource = Enum.GetNames(this.app.EventHandler.GetEventSubType(eventTypeBox.Text));
             };
             currencyBox = Elements.TypeBox(Enum.GetNames(typeof(Currency)));
             amountPicker = new NumericUpDown {Dock = DockStyle.Fill, DecimalPlaces = 2};
@@ -70,7 +71,8 @@ namespace TravelPlanner.UserInterface
         {
             var saveButton = Elements.GetButton("Сохранить", (sender, args) =>
             {
-                var travelEvent = app.GetEvent(eventTypeBox.Text, startPicker.Value, endPicker.Value,
+                var travelEvent = app.EventHandler.GetEvent(eventTypeBox.Text, 
+                    startPicker.Value, endPicker.Value,
                     amountPicker.Value, currencyBox.Text, subEventTypeBox.Text);
                 app.AddEvent(travelEvent);
                 Close();

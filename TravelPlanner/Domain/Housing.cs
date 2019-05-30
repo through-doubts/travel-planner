@@ -13,6 +13,7 @@ namespace TravelPlanner.Domain
         public Money Cost { get; }
         public HousingType Type { get; }
         public string Name => "Жилье";
+        public Type SubTypesType => typeof(HousingType);
 
         public Housing()
         {

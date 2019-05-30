@@ -14,6 +14,7 @@ namespace TravelPlanner.Domain
         public Money Cost { get; }
         public TransferType Type { get; }
         public string Name => "Перемещение";
+        public Type SubTypesType => typeof(TransferType);
 
         public Transfer()
         {

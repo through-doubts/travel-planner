@@ -39,7 +39,7 @@ namespace TravelPlanner.UserInterface
             table.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
             var addButton = Elements.GetButton("Добавить", (sender, args) =>
             {
-                app.AddTravel();
+                app.AddTravel("name"); //TODO: Илюха, ты хотел ты и разбирайся
                 var createPathForm = new PathForm(app);
                 createPathForm.Show(this);
                 InitTable();
