@@ -24,7 +24,7 @@ namespace TravelPlanner.UserInterface
         public AddForm(IApplication app, IEnumerable<string> cities)
         {
             this.app = app;
-            Size = new Size(600, 600);
+            Size = new Size(800, 600);
             ShadowType = MetroFormShadowType.None;
             startPicker = Elements.GeTimePicker();
             endPicker = Elements.GeTimePicker();
@@ -78,7 +78,7 @@ namespace TravelPlanner.UserInterface
             table.Controls.Add(Elements.GetLabel("Стоимость"), 0, 6);
             table.Controls.Add(Elements.GetLabel("Валюта"), 0, 7);
             table.Controls.Add(GetSaveButton(), 0, 8);
-            table.Controls.Add(GetCancelButton(), 0, 9);
+            table.Controls.Add(Elements.BackButton(this, "Отмена"), 0, 9);
         }
 
         private Button GetSaveButton()
@@ -92,13 +92,6 @@ namespace TravelPlanner.UserInterface
             });
             saveButton.Dock = DockStyle.Bottom;
             return saveButton;
-        }
-
-        private Button GetCancelButton()
-        {
-            var cancelButton = Elements.GetButton("Отмена", (sender, args) => Close());
-            cancelButton.Dock = DockStyle.Bottom;
-            return cancelButton;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
 using TravelPlanner.Application;
@@ -17,10 +16,10 @@ namespace TravelPlanner.UserInterface
             this.pathForm = pathForm;
             Size = new Size(800, 600);
             ShadowType = MetroFormShadowType.None;
-            InitTable();
+            Controls.Add(InitTable());
         }
 
-        private void InitTable()
+        private TableLayoutPanel InitTable()
         {
             var table = new TableLayoutPanel();
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
@@ -28,31 +27,51 @@ namespace TravelPlanner.UserInterface
             for (var i = 0; i < travels.Count; i++)
             {
                 table.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
-                var travelButton = Elements.GetButton(travels[i].ToString(), (sender, args) =>
-                {
-                    pathForm.ShowDialog(this);
-                    InitTable();
-                });
-                travelButton.Dock = DockStyle.Fill;
-                table.Controls.Add(travelButton, 0, i);
+                table.Controls.Add(GetTravelButton(travels[i].ToString()), 0, i);
             }
 
             table.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
-            var addButton = Elements.GetButton("Добавить", (sender, args) =>
-            {
-                app.AddTravel();
-                pathForm.ShowDialog(this);
-                InitTable();
-            });
-            addButton.Dock = DockStyle.Fill;
-            table.Controls.Add(addButton);
+            table.Controls.Add(GetAddButton());
 
             table.Dock = DockStyle.Fill;
+            return table;
+        }
+
+        private void UpdateTable()
+        {
+            var newTable = InitTable();
             foreach (Control control in Controls)
             {
                 if (control is TableLayoutPanel) Controls.Remove(control);
             }
-            Controls.Add(table);
+            Controls.Add(newTable);
+        }
+
+        private Button GetAddButton()
+        {
+            var addButton = Elements.GetButton("Добавить", (sender, args) =>
+            {
+                Hide();
+                app.AddTravel();
+                pathForm.ShowDialog(this);
+                UpdateTable();
+                Show();
+            });
+            addButton.Dock = DockStyle.Fill;
+            return addButton;
+        }
+
+        private Button GetTravelButton(string travelName)
+        {
+            var travelButton = Elements.GetButton(travelName, (sender, args) =>
+            {
+                Hide();
+                pathForm.ShowDialog(this);
+                UpdateTable();
+                Show();
+            });
+            travelButton.Dock = DockStyle.Fill;
+            return travelButton;
         }
     }
 }

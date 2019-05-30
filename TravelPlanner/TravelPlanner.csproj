@@ -53,10 +53,14 @@
     <Reference Include="nunitlite">
       <HintPath>.\nunitlite.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=106.6.9.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>packages\RestSharp.106.6.9\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Device" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -85,6 +89,12 @@
     <Compile Include="Infrastructure\Money.cs" />
     <Compile Include="Infrastructure\DateTimeInterval.cs" />
     <Compile Include="Infrastructure\Entity.cs" />
+    <Compile Include="Infrastructure\Network\FlightParameters.cs" />
+    <Compile Include="Infrastructure\Network\HttpApi.cs" />
+    <Compile Include="Infrastructure\Network\IFlightDataProvider.cs" />
+    <Compile Include="Infrastructure\Network\INetworkDataProvider.cs" />
+    <Compile Include="Infrastructure\Network\SkyscannerApi.cs" />
+    <Compile Include="Infrastructure\Network\SkyscannerApiParameters.cs" />
     <Compile Include="Infrastructure\ValueType.cs" />
     <Compile Include="UserInterface\AddForm.cs">
       <SubType>Form</SubType>

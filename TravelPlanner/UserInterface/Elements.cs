@@ -51,5 +51,12 @@ namespace TravelPlanner.UserInterface
             AutoCompleteSource = AutoCompleteSource.CustomSource,
             AutoCompleteCustomSource = cities.ToAutoCompleteStringCollection()
         };
+
+        public static Button BackButton(Form form, string text)
+        {
+            var button = GetButton(text, (sender, args) => form.Close());
+            button.Dock = DockStyle.Bottom;
+            return button;
+        }
     }
 }
