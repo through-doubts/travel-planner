@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Controls;
+using TravelPlanner.Infrastructure;
 
 namespace TravelPlanner.UserInterface
 {
@@ -41,5 +43,20 @@ namespace TravelPlanner.UserInterface
             Format = DateTimePickerFormat.Custom,
             CustomFormat = "MM/dd/yyyy hh:mm:ss"
         };
+
+        public static MetroTextBox CityBox(IEnumerable<string> cities) => new MetroTextBox
+        {
+            Dock = DockStyle.Fill,
+            AutoCompleteMode = AutoCompleteMode.SuggestAppend,
+            AutoCompleteSource = AutoCompleteSource.CustomSource,
+            AutoCompleteCustomSource = cities.ToAutoCompleteStringCollection()
+        };
+
+        public static Button BackButton(Form form, string text)
+        {
+            var button = GetButton(text, (sender, args) => form.Close());
+            button.Dock = DockStyle.Bottom;
+            return button;
+        }
     }
 }
