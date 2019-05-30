@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
 using TravelPlanner.Application;
@@ -8,10 +9,12 @@ namespace TravelPlanner.UserInterface
     class ApplicationForm : MetroForm
     {
         private readonly IApplication app;
+        private readonly MetroForm pathForm;
 
-        public ApplicationForm(IApplication app)
+        public ApplicationForm(IApplication app, MetroForm pathForm)
         {
             this.app = app;
+            this.pathForm = pathForm;
             Size = new Size(800, 600);
             ShadowType = MetroFormShadowType.None;
             InitTable();
@@ -25,11 +28,9 @@ namespace TravelPlanner.UserInterface
             for (var i = 0; i < travels.Count; i++)
             {
                 table.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
-                var i1 = i;
                 var travelButton = Elements.GetButton(travels[i].ToString(), (sender, args) =>
                 {
-                    var createPathForm = new PathForm(app, travels[i1]);
-                    createPathForm.Show(this);
+                    pathForm.ShowDialog(this);
                     InitTable();
                 });
                 travelButton.Dock = DockStyle.Fill;
@@ -40,8 +41,7 @@ namespace TravelPlanner.UserInterface
             var addButton = Elements.GetButton("Добавить", (sender, args) =>
             {
                 app.AddTravel();
-                var createPathForm = new PathForm(app);
-                createPathForm.Show(this);
+                pathForm.ShowDialog(this);
                 InitTable();
             });
             addButton.Dock = DockStyle.Fill;

@@ -8,28 +8,21 @@ namespace TravelPlanner.UserInterface
 {
     class PathForm : MetroForm
     {
-        private readonly IApplication app;
-        private readonly Travel travel;
+        private readonly MetroForm addForm;
 
-        public PathForm(IApplication app, Travel travel)
+        public PathForm(MetroForm addForm)
         {
-            this.app = app;
-            this.travel = travel;
+            this.addForm = addForm;
             Size = new Size(600, 600);
             ShadowType = MetroFormShadowType.None;
             Controls.Add(GetAddButton());
-        }
-
-        public PathForm(IApplication app) : this(app, null)
-        {
         }
 
         private Button GetAddButton()
         {
             var addButton = Elements.GetButton("Добавить событие", (sender, args) =>
             {
-                var addForm = new AddForm(app);
-                addForm.Show(this);
+                addForm.ShowDialog(this);
             });
             addButton.Dock = DockStyle.Bottom;
             return addButton;
