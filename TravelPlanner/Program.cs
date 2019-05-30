@@ -22,7 +22,7 @@ namespace TravelPlanner
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
             System.Windows.Forms.Application.Run(new ApplicationForm(application,
-                new PathForm(new AddForm(application, new List<string>()))));
+                new PathForm(application, new AddForm(application, new List<string>()))));
         }
 
         static IApplication GetApplication()
