@@ -52,7 +52,7 @@ namespace TravelPlanner.UserInterface
             var addButton = Elements.GetButton("Добавить", (sender, args) =>
             {
                 Hide();
-                app.AddTravel();
+                app.AddTravel("name");//TODO: Илюха, ты хотел ты и разбирайся
                 pathForm.ShowDialog(this);
                 UpdateTable();
                 Show();

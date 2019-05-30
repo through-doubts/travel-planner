@@ -12,6 +12,7 @@ namespace TravelPlanner.Domain
         DateTimeInterval DateTimeInterval { get; }
         Money Cost { get; }
         string Name { get; }
+        Type SubTypesType { get; }
 
     }
 }

@@ -19,16 +19,22 @@ namespace TravelPlanner
         static void Main()
         {
             var application = new MainApplication(new ITravelEvent[]
+
+            System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+            System.Windows.Forms.Application.Run(new ApplicationForm(GetApplication(),
+                                                                     new PathForm(new AddForm(application, new List<string>())))));
+        }
+
+        static IApplication GetApplication()
+        {
+            var eventHandler = new TravelEventHandler(new ITravelEvent[]
             {
                 new Housing(),
                 new Transfer(),
             });
-            System.Windows.Forms.Application.EnableVisualStyles();
-            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-            System.Windows.Forms.Application.Run(new ApplicationForm(application,
-                new PathForm(new AddForm(application, new List<string>()))));
-            //ExcelReader.TableToListOfRows(new MemoryStream(Resources.countries),
-            //Encoding.GetEncoding("windows-1251"))))));
+
+            return new MainApplication(eventHandler);
         }
     }
 }
