@@ -8,9 +8,9 @@ namespace TravelPlanner.UserInterface
     class ApplicationForm : MetroForm
     {
         private readonly IApplication app;
-        private readonly MetroForm pathForm;
+        private readonly PathForm pathForm;
 
-        public ApplicationForm(IApplication app, MetroForm pathForm)
+        public ApplicationForm(IApplication app, PathForm pathForm)
         {
             this.app = app;
             this.pathForm = pathForm;
@@ -27,7 +27,7 @@ namespace TravelPlanner.UserInterface
             for (var i = 0; i < travels.Count; i++)
             {
                 table.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
-                table.Controls.Add(GetTravelButton(travels[i].ToString()), 0, i);
+                table.Controls.Add(GetTravelButton(travels[i].Name), 0, i);
             }
 
             table.RowStyles.Add(new RowStyle(SizeType.Percent, 15));
@@ -51,8 +51,14 @@ namespace TravelPlanner.UserInterface
         {
             var addButton = Elements.GetButton("Добавить", (sender, args) =>
             {
+                string name;
+                var enterForm = new EnterNameForm();
+                if (enterForm.ShowDialog(this) == DialogResult.OK)
+                    name = enterForm.SelectedText;
+                else
+                    return;
                 Hide();
-                app.AddTravel("name");//TODO: Илюха, ты хотел ты и разбирайся
+                app.AddTravel(name);
                 pathForm.ShowDialog(this);
                 UpdateTable();
                 Show();
@@ -65,6 +71,7 @@ namespace TravelPlanner.UserInterface
         {
             var travelButton = Elements.GetButton(travelName, (sender, args) =>
             {
+                app.ChangeCurrentTravel(travelName);
                 Hide();
                 pathForm.ShowDialog(this);
                 UpdateTable();

@@ -1,33 +1,57 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using TravelPlanner.Application;
+using TravelPlanner.Domain;
 
 namespace TravelPlanner.UserInterface
 {
     class PathForm : MetroForm
     {
-        private readonly MetroForm addForm;
+        private readonly AddForm addForm;
+        private readonly IApplication app;
+        private List<ITravelEvent> events = new List<ITravelEvent>();
 
-        public PathForm(MetroForm addForm)
+        public PathForm(IApplication app, AddForm addForm)
         {
+            this.app = app;
             this.addForm = addForm;
             Size = new Size(800, 600);
             ShadowType = MetroFormShadowType.None;
-            InitTable();
+            Controls.Add(InitTable());
         }
 
-        private void InitTable()
+        private TableLayoutPanel InitTable()
         {
             var table = new TableLayoutPanel();
-            table.RowStyles.Add(new RowStyle(SizeType.Percent, 80));
+
+            for(var i = 0; i < events.Count; i++)
+            {
+                table.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
+                var travelEventButton = GetTravelEventButton(events[i].Name);
+                table.Controls.Add(travelEventButton, 0, i);
+            }
+
             table.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
             table.RowStyles.Add(new RowStyle(SizeType.Percent, 10));
 
-            table.Controls.Add(GetAddButton(), 0, 1);
-            table.Controls.Add(Elements.BackButton(this, "Назад"), 0, 2);
+            table.Controls.Add(GetAddButton());
+            table.Controls.Add(Elements.BackButton(this, "Назад"));
 
             table.Dock = DockStyle.Fill;
-            Controls.Add(table);
+            return table;
+        }
+
+        private void UpdateTable()
+        {
+            events = app.GetTravelEvents();
+            var newTable = InitTable();
+            foreach (Control control in Controls)
+            {
+                if (control is TableLayoutPanel) Controls.Remove(control);
+            }
+            Controls.Add(newTable);
         }
 
         private Button GetAddButton()
@@ -37,9 +61,17 @@ namespace TravelPlanner.UserInterface
                 Hide();
                 addForm.ShowDialog(this);
                 Show();
+                UpdateTable();
             });
-            addButton.Dock = DockStyle.Bottom;
+            addButton.Dock = DockStyle.Fill;
             return addButton;
+        }
+
+        private Button GetTravelEventButton(string eventName)
+        {
+            var eventButton = Elements.GetButton(eventName, (sender, args) => { });
+            eventButton.Dock = DockStyle.Fill;
+            return eventButton;
         }
     }
 }

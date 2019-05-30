@@ -43,7 +43,17 @@ namespace TravelPlanner.Application
             currentUser.AddEvent(travelEvent);
         }
 
-     
+        public void ChangeCurrentTravel(string travelName)
+        {
+            currentUser.ChangeCurrentTravel(travelName);
+        }
+
+        public List<ITravelEvent> GetTravelEvents()
+        {
+            return currentUser.GetTravelEvents();
+        }
+
+
 
         public List<Travel> GetTravels()
         {

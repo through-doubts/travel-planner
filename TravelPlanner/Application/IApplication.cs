@@ -17,5 +17,8 @@ namespace TravelPlanner.Application
         void AddTravel(string travelName);
         void AddEvent(ITravelEvent travelEvent);
         List<Travel> GetTravels();
+
+        void ChangeCurrentTravel(string travelName);
+        List<ITravelEvent> GetTravelEvents();
     }
 }
