@@ -18,12 +18,11 @@ namespace TravelPlanner
         [STAThread]
         static void Main()
         {
-            var application = new MainApplication(new ITravelEvent[]
-
+            var application = GetApplication();
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-            System.Windows.Forms.Application.Run(new ApplicationForm(GetApplication(),
-                                                                     new PathForm(new AddForm(application, new List<string>())))));
+            System.Windows.Forms.Application.Run(new ApplicationForm(application,
+                new PathForm(new AddForm(application, new List<string>()))));
         }
 
         static IApplication GetApplication()
