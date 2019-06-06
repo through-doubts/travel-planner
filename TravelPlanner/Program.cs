@@ -7,6 +7,7 @@ using TravelPlanner.Domain;
 using TravelPlanner.Infrastructure;
 using TravelPlanner.UserInterface;
 using TravelPlanner.Properties;
+using Ninject;
 
 namespace TravelPlanner
 {
@@ -27,13 +28,11 @@ namespace TravelPlanner
 
         static IApplication GetApplication()
         {
-            var eventHandler = new TravelEventHandler(new ITravelEvent[]
-            {
-                new Housing(),
-                new Transfer(),
-            });
-
-            return new MainApplication(eventHandler);
+            var container = new StandardKernel();
+            container.Bind<IEventHandler>().To<TravelEventHandler>();
+            container.Bind<ITravelEvent>().To<Housing>();
+            container.Bind<ITravelEvent>().To<Transfer>();
+            return container.Get<MainApplication>();
         }
     }
 }
