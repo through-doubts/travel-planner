@@ -92,6 +92,7 @@
     <Compile Include="Infrastructure\Currency.cs" />
     <Compile Include="Infrastructure\EnumerableExtensions.cs" />
     <Compile Include="Infrastructure\ExcelReader.cs" />
+    <Compile Include="Infrastructure\Network\AirportsFinder\AirportsFinder.cs" />
     <Compile Include="Infrastructure\Network\Currency\CurrencyApi.cs" />
     <Compile Include="Infrastructure\Network\Currency\ICurrencyDataProvider.cs" />
     <Compile Include="Infrastructure\Network\IHousingDataProvider.cs" />
