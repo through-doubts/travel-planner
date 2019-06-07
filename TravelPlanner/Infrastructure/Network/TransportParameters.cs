@@ -2,7 +2,7 @@
 
 namespace TravelPlanner.Infrastructure.Network
 {
-    public class FlightParameters
+    public class TransportParameters
     {
         public readonly string Currency;
         public readonly string OriginPlace;
@@ -11,7 +11,7 @@ namespace TravelPlanner.Infrastructure.Network
         public readonly int AdultsCount;
         public readonly int ChildrenCount;
         public readonly string CabinClass;
-        public FlightParameters(string currency, string originPlace, string destinationPlace, DateTime outboundDate,
+        public TransportParameters(string currency, string originPlace, string destinationPlace, DateTime outboundDate,
             int adultsCount, int childrenCount, string cabinClass)
         {
             Currency = currency;
