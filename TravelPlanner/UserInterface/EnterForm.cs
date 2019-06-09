@@ -4,13 +4,13 @@ using MetroFramework.Forms;
 
 namespace TravelPlanner.UserInterface
 { 
-    class EnterNameForm : MetroForm
+    class EnterForm : MetroForm
     {
         public string SelectedText { get; private set; }
         private readonly Button okButton;
         private readonly TextBox box;
 
-        public EnterNameForm()
+        public EnterForm()
         {
             ShadowType = MetroFormShadowType.None;
             Size = new Size(300, 200);

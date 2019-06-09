@@ -1,24 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RestSharp;
 
-namespace TravelPlanner.Infrastructure.Network
+namespace TravelPlanner.Infrastructure.Network.Skyscanner
 {
-    public class SkyscannerApi : HttpApi, IFlightDataProvider
+    public class SkyscannerApi : HttpApi, ITransportDataProvider
     {
-        private static readonly string RapidApiHost = "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com";
-        private static readonly string RapidApiKey = "5e1b6e0ce2mshf8d7bf48452442dp1fda98jsn9ef336f6b389";
-        private static readonly string PostResource = "apiservices/pricing/v1.0";
-        private static readonly string GetResource = "apiservices/pricing/uk2/v1.0/";
-        private static readonly string Url = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com";
+        private const string RapidApiHost = "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com";
+        private static readonly string RapidApiKey = Environment.GetEnvironmentVariable("rapidapi-key");
+        private const string PostResource = "apiservices/pricing/v1.0";
+        private const string GetResource = "apiservices/pricing/uk2/v1.0/";
+        private const string Url = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com";
 
-        public string GetData(FlightParameters parameters)
+        public string GetData(TransportParameters parameters)
         {
             var skyscannerParameters = SkyscannerApiParameters.FromFlightParameters(parameters);
             var data = SendRequestAndReturnResponse(Method.POST, GetHeaders(), skyscannerParameters, PostResource, Url);
             var location = data.Headers
                 .ToList()
-                .Find(x => x.Name == "location")
+                .Find(x => x.Name == "Location")
                 .Value.ToString()
                 .Split('/')
                 .Last();

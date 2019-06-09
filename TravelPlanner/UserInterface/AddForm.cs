@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using MetroFramework.Controls;
 using MetroFramework.Forms;
 using TravelPlanner.Application;
+using TravelPlanner.Domain;
 using TravelPlanner.Infrastructure;
 
 namespace TravelPlanner.UserInterface
@@ -21,7 +22,7 @@ namespace TravelPlanner.UserInterface
         private readonly MetroTextBox cityBoxStart;
         private readonly MetroTextBox cityBoxEnd;
 
-        public AddForm(IApplication app, IEnumerable<string> cities)
+        public AddForm(IApplication app, IEnumerable<string> cities, ITravelEvent travelEvent)
         {
             this.app = app;
             Size = new Size(800, 600);
@@ -39,7 +40,22 @@ namespace TravelPlanner.UserInterface
             amountPicker = new NumericUpDown {Dock = DockStyle.Fill, DecimalPlaces = 2};
             cityBoxStart = Elements.CityBox(cities);
             cityBoxEnd = Elements.CityBox(cities);
+            if (travelEvent != null)
+            {
+                InitElementsText(travelEvent);
+            }
             InitTable();
+        }
+
+        public AddForm(IApplication app, IEnumerable<string> cities) : this(app, cities, null) { }
+
+        private void InitElementsText(ITravelEvent travelEvent)
+        {
+            startPicker.Value = travelEvent.DateTimeInterval.Start;
+            endPicker.Value = travelEvent.DateTimeInterval.End;
+            eventTypeBox.Text = travelEvent.Name;
+            currencyBox.Text = travelEvent.Cost.Currency.ToString();
+            amountPicker.Value = travelEvent.Cost.Amount;
         }
 
         private void InitTable()
@@ -78,8 +94,9 @@ namespace TravelPlanner.UserInterface
             table.Controls.Add(Elements.GetLabel("Дата2"), 0, 5);
             table.Controls.Add(Elements.GetLabel("Стоимость"), 0, 6);
             table.Controls.Add(Elements.GetLabel("Валюта"), 0, 7);
-            table.Controls.Add(GetSaveButton(), 0, 8);
-            table.Controls.Add(Elements.BackButton(this, "Отмена"), 0, 9);
+            table.Controls.Add(GetNetworkButton(), 0, 8);
+            table.Controls.Add(GetSaveButton(), 0, 9);
+            table.Controls.Add(Elements.BackButton(this, "Отмена"), 0, 10);
         }
 
         private Button GetSaveButton()
@@ -94,6 +111,13 @@ namespace TravelPlanner.UserInterface
             });
             saveButton.Dock = DockStyle.Bottom;
             return saveButton;
+        }
+
+        private Button GetNetworkButton()
+        {
+            var networkButton = Elements.GetButton("Посмотреть варианты в сети", (sender, args) => { });
+            networkButton.Dock = DockStyle.Fill;
+            return networkButton;
         }
     }
 }
