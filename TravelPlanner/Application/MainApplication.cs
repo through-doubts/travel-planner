@@ -11,53 +11,13 @@ namespace TravelPlanner.Application
 {
     public class MainApplication : IApplication
     {
-        public IEventHandler EventHandler { get; }
+        public IEventHandler EventHandler { get; }   
+        public IUserSessionHandler UserSessionHandler { get; }
 
-        private List<User> users;
-        private int currentUserId;
-        private User currentUser;
-
-        public MainApplication(IEventHandler eventHandler)
+        public MainApplication(IEventHandler eventHandler, IUserSessionHandler userSessionHandler)
         {
             EventHandler = eventHandler;
-            
-            users = new List<User>();
-            AddUser();
-        }
-
-        public void AddUser() // срабатывает мб при нажатии какой-нибудь кнопочки
-        {
-            var user = new User(currentUserId);
-            currentUserId++;
-            users.Add(user);
-            currentUser = user;
-        }
-
-        public void AddTravel(string travelName)
-        {
-            currentUser.AddTravel(travelName);
-        }
-
-        public void AddEvent(ITravelEvent travelEvent)
-        {
-            currentUser.AddEvent(travelEvent);
-        }
-
-        public void ChangeCurrentTravel(string travelName)
-        {
-            currentUser.ChangeCurrentTravel(travelName);
-        }
-
-        public List<ITravelEvent> GetTravelEvents()
-        {
-            return currentUser.GetTravelEvents();
-        }
-
-
-
-        public List<Travel> GetTravels()
-        {
-            return currentUser.GetTravels();
+            UserSessionHandler = userSessionHandler;
         }
 
     }
