@@ -15,6 +15,10 @@ namespace TravelPlanner.Domain
         public TransferType Type { get; }
         public string Name => "Перемещение";
         public Type SubTypesType => typeof(TransferType);
+        public string ToStringValue()
+        {
+            return Name;
+        }
 
         public Transfer()
         {

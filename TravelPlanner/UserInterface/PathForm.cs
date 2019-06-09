@@ -2,16 +2,18 @@
 using System.Drawing;
 using System.Windows.Forms;
 using TravelPlanner.Application;
+using System.Linq;
 
 namespace TravelPlanner.UserInterface
 {
     class PathForm : ChooseOptionForm
     {
-        private readonly AddForm addForm;
+        private readonly IApplication app;
 
-        public PathForm(IApplication app, AddForm addForm) : base(app.GetTravelEvents)
+        public PathForm(IApplication app) : base(
+            () => app.UserSessionHandler.GetTravelEvents().Select(e => e.ToStringValue()).ToList())
         {
-            this.addForm = addForm;
+            this.app = app;
             Size = new Size(800, 600);
         }
 
@@ -20,6 +22,7 @@ namespace TravelPlanner.UserInterface
             var addButton = Elements.GetButton("Добавить событие", (sender, args) =>
             {
                 Hide();
+                var addForm = new AddForm(app);
                 addForm.ShowDialog(this);
                 Show();
                 UpdateTable();
@@ -34,6 +37,7 @@ namespace TravelPlanner.UserInterface
             {
                 //app.ChangeCurrentTravel(travelName);
                 Hide();
+                var addForm = new AddForm(app);
                 addForm.ShowDialog(this);
                 UpdateTable();
                 Show();

@@ -14,6 +14,10 @@ namespace TravelPlanner.Domain
         public HousingType Type { get; }
         public string Name => "Жилье";
         public Type SubTypesType => typeof(HousingType);
+        public string ToStringValue()
+        {
+            return Name; 
+        }
 
         public Housing()
         {

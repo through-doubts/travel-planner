@@ -47,7 +47,7 @@ namespace TravelPlanner.UserInterface
             InitTable();
         }
 
-        public AddForm(IApplication app, IEnumerable<string> cities) : this(app, cities, null) { }
+        public AddForm(IApplication app) : this(app, new List<string>(), null) { }
 
         private void InitElementsText(ITravelEvent travelEvent)
         {
@@ -106,7 +106,7 @@ namespace TravelPlanner.UserInterface
                 var travelEvent = app.EventHandler.GetEvent(eventTypeBox.Text, 
                     startPicker.Value, endPicker.Value,
                     amountPicker.Value, currencyBox.Text, subEventTypeBox.Text);
-                app.AddEvent(travelEvent);
+                app.UserSessionHandler.AddEvent(travelEvent);
                 Close();
             });
             saveButton.Dock = DockStyle.Bottom;

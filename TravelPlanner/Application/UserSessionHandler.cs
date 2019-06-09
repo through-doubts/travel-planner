@@ -54,7 +54,7 @@ namespace TravelPlanner.Application
 
         public List<ITravelEvent> GetTravelEvents()
         {
-            return currentTravel.GetTravelEvents();
+            return currentTravel?.GetTravelEvents();
         }
     }
 }

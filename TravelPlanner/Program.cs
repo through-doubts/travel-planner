@@ -22,8 +22,7 @@ namespace TravelPlanner
             var application = GetApplication();
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-            System.Windows.Forms.Application.Run(new ApplicationForm(application,
-                new PathForm(application, new AddForm(application, new List<string>()))));
+            System.Windows.Forms.Application.Run(new ApplicationForm(application));
         }
 
         static IApplication GetApplication()

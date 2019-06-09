@@ -8,9 +8,9 @@ namespace TravelPlanner.UserInterface
 {
     public abstract class ChooseOptionForm : MetroForm
     {
-        private readonly Func<IList> getOptions;
+        private readonly Func<List<string>> getOptions;
 
-        protected ChooseOptionForm(Func<IList> getOptions)
+        protected ChooseOptionForm(Func<List<string>> getOptions)
         {
             this.getOptions = getOptions;
             ShadowType = MetroFormShadowType.None;
@@ -25,7 +25,7 @@ namespace TravelPlanner.UserInterface
             for (var i = 0; i < options.Count; i++)
             {
                 table.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));
-                table.Controls.Add(GetOptionButton(options[i].ToString()), 0, i);
+                table.Controls.Add(GetOptionButton(options[i]), 0, i);
             }
 
             foreach (var button in GetButtons())
