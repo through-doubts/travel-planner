@@ -78,11 +78,13 @@
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Application\IDataProvider.cs" />
     <Compile Include="Application\IEventHandler.cs" />
+    <Compile Include="Application\IUserSessionHandler.cs" />
     <Compile Include="Application\MainApplication.cs" />
     <Compile Include="Application\Tests\MainApplication_should.cs" />
     <Compile Include="Application\Tests\TravelEventHandler_should.cs" />
     <Compile Include="Application\TravelEventHandler.cs" />
     <Compile Include="Application\User.cs" />
+    <Compile Include="Application\UserSessionHandler.cs" />
     <Compile Include="Domain\Housing.cs" />
     <Compile Include="Domain\ITravelEvent.cs" />
     <Compile Include="Domain\Location.cs" />

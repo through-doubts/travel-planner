@@ -12,13 +12,7 @@ namespace TravelPlanner.Application
     interface IApplication
     {
         IEventHandler EventHandler { get; }
+        IUserSessionHandler UserSessionHandler { get; }
 
-        void AddUser();
-        void AddTravel(string travelName);
-        void AddEvent(ITravelEvent travelEvent);
-        List<Travel> GetTravels();
-
-        void ChangeCurrentTravel(string travelName);
-        List<ITravelEvent> GetTravelEvents();
     }
 }

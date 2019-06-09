@@ -11,41 +11,31 @@ namespace TravelPlanner.Application
     public class User : Entity<int>
     {
         private readonly List<Travel> travels;
-        private Travel currentTravel;
-        private int currentTravelId;
 
         public User(int id) : base(id)
         {
             travels = new List<Travel>();
         }
 
-        public void AddTravel(string travelName)
+        public void AddTravel(Travel travel)
         {
-            var travel = new Travel(currentTravelId, travelName);
-            currentTravelId++;
             travels.Add(travel);
-            currentTravel = travel;
         }
 
-        public void ChangeCurrentTravel(string travelName)
+        public Travel GetTravel(string travelName)
         {
-            var travel = travels.FirstOrDefault(t => t.Name == travelName);
-            currentTravel = travel;
+            return travels.FirstOrDefault(t => t.Name == travelName);
         }
 
-        public List<ITravelEvent> GetTravelEvents()
+        public void DeleteTravel(string travelName)
         {
-            return currentTravel.GetTravelEvents();
+            var travel = GetTravel(travelName);
+            travels.Remove(travel);
         }
 
-        public void AddEvent(ITravelEvent travelEvent)
+        public List<string> GetTravelsNames()
         {
-            currentTravel.AddEvent(travelEvent);
-        }
-
-        public List<Travel> GetTravels()
-        {
-            return new List<Travel>(travels);
+            return travels.Select(t => t.Name).ToList();
         }
     }
 }
