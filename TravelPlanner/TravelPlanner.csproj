@@ -93,8 +93,9 @@
     <Compile Include="Domain\Transfer.cs" />
     <Compile Include="Domain\Travel.cs" />
     <Compile Include="Infrastructure\Currency.cs" />
-    <Compile Include="Infrastructure\EnumerableExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Infrastructure\ExcelReader.cs" />
+    <Compile Include="Infrastructure\Extensions\TableLayoutPanelExtensions.cs" />
     <Compile Include="Infrastructure\Network\AirportsFinder\AirportsFinder.cs" />
     <Compile Include="Infrastructure\Network\Currency\CurrencyApi.cs" />
     <Compile Include="Infrastructure\Network\Currency\ICurrencyDataProvider.cs" />

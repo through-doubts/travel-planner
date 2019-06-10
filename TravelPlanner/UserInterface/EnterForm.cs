@@ -3,8 +3,8 @@ using System.Windows.Forms;
 using MetroFramework.Forms;
 
 namespace TravelPlanner.UserInterface
-{ 
-    class EnterForm : MetroForm
+{
+    sealed class EnterForm : MetroForm
     {
         public string SelectedText { get; private set; }
         private readonly Button okButton;
@@ -13,8 +13,10 @@ namespace TravelPlanner.UserInterface
         public EnterForm()
         {
             ShadowType = MetroFormShadowType.None;
+            Text = "Введите имя";
             Size = new Size(300, 200);
-            BorderStyle = MetroFormBorderStyle.FixedSingle;
+            Resizable = false;
+            MaximizeBox = false;
             okButton = Elements.GetButton("OK", (sender, args) =>
             {
                 DialogResult = DialogResult.OK;
@@ -29,14 +31,12 @@ namespace TravelPlanner.UserInterface
         private void InitTable()
         {
             var table = new TableLayoutPanel();
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80));
+            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             table.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
             table.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
 
-            table.Controls.Add(Elements.GetLabel("Имя"), 0, 0);
-            table.Controls.Add(box, 1, 0);
-            table.Controls.Add(okButton, 1, 1);
+            table.Controls.Add(box, 0, 0);
+            table.Controls.Add(okButton, 0, 1);
 
             table.Dock = DockStyle.Fill;
             Controls.Add(table);
