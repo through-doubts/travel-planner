@@ -18,7 +18,6 @@ namespace TravelPlanner.UserInterface
 
         public static TextBox GetLabel(string text) => new TextBox
         {
-            Dock = DockStyle.Fill,
             Text = text,
             Enabled = false
         };
@@ -39,14 +38,12 @@ namespace TravelPlanner.UserInterface
 
         public static DateTimePicker GeTimePicker() => new DateTimePicker
         {
-            Dock = DockStyle.Fill,
             Format = DateTimePickerFormat.Custom,
             CustomFormat = "MM/dd/yyyy hh:mm:ss"
         };
 
         public static MetroTextBox CityBox(IEnumerable<string> cities) => new MetroTextBox
         {
-            Dock = DockStyle.Fill,
             AutoCompleteMode = AutoCompleteMode.SuggestAppend,
             AutoCompleteSource = AutoCompleteSource.CustomSource,
             AutoCompleteCustomSource = cities.ToAutoCompleteStringCollection()
@@ -55,7 +52,7 @@ namespace TravelPlanner.UserInterface
         public static Button BackButton(Form form, string text)
         {
             var button = GetButton(text, (sender, args) => form.Close());
-            button.Dock = DockStyle.Bottom;
+            button.Dock = DockStyle.Fill;
             return button;
         }
     }

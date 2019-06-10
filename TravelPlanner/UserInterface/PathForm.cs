@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace TravelPlanner.UserInterface
 {
-    class PathForm : ChooseOptionForm
+    sealed class PathForm : ChooseOptionForm
     {
         private readonly IApplication app;
 
@@ -15,6 +15,7 @@ namespace TravelPlanner.UserInterface
         {
             this.app = app;
             Size = new Size(800, 600);
+            Text = "События";
         }
 
         private Button GetAddButton()
@@ -27,7 +28,6 @@ namespace TravelPlanner.UserInterface
                 Show();
                 UpdateTable();
             });
-            addButton.Dock = DockStyle.Fill;
             return addButton;
         }
 
@@ -43,7 +43,6 @@ namespace TravelPlanner.UserInterface
                 Show();
             });
             eventButton.ContextMenuStrip = GetTravelButtonStrip();
-            eventButton.Dock = DockStyle.Fill;
             return eventButton;
         }
 
@@ -58,15 +57,17 @@ namespace TravelPlanner.UserInterface
         private Button GetUpdateButton()
         {
             var updateButton = Elements.GetButton("Обновить", (sender, args) => { });
-            updateButton.Dock = DockStyle.Fill;
             return updateButton;
         }
 
-        protected override IEnumerable<Button> GetButtons()
+        protected override List<Button> GetButtons()
         {
-            yield return GetAddButton();
-            yield return GetUpdateButton();
-            yield return Elements.BackButton(this, "Назад");
+            return new List<Button>
+            {
+                GetAddButton(),
+                GetUpdateButton(),
+                Elements.BackButton(this, "Назад")
+            };
         }
 
         protected override Button GetOptionButton(string optionName)

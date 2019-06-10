@@ -5,7 +5,7 @@ using TravelPlanner.Application;
 
 namespace TravelPlanner.UserInterface
 {
-    class ApplicationForm : ChooseOptionForm
+    sealed class ApplicationForm : ChooseOptionForm
     {
         private readonly IApplication app;
 
@@ -13,11 +13,12 @@ namespace TravelPlanner.UserInterface
         {
             this.app = app;
             Size = new Size(800, 600);
+            Text = "Путешествия";
         }
 
         private Button GetAddButton()
         {
-            var addButton = Elements.GetButton("Добавить", (sender, args) =>
+            var addButton = Elements.GetButton("Добавить путешествие", (sender, args) =>
             {
                 string name;
                 var enterForm = new EnterForm();
@@ -32,7 +33,6 @@ namespace TravelPlanner.UserInterface
                 UpdateTable();
                 Show();
             });
-            addButton.Dock = DockStyle.Fill;
             return addButton;
         }
 
@@ -47,13 +47,12 @@ namespace TravelPlanner.UserInterface
                 UpdateTable();
                 Show();
             });
-            travelButton.Dock = DockStyle.Fill;
             return travelButton;
         }
 
-        protected override IEnumerable<Button> GetButtons()
+        protected override List<Button> GetButtons()
         {
-            yield return GetAddButton();
+            return new List<Button> {GetAddButton()};
         }
 
         protected override Button GetOptionButton(string optionName)
