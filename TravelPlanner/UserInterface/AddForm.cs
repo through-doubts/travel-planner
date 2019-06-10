@@ -8,12 +8,15 @@ using MetroFramework.Forms;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
 using TravelPlanner.Infrastructure;
+using TravelPlanner.Infrastructure.Extensions;
 
 namespace TravelPlanner.UserInterface
 {
     sealed class AddForm : MetroForm
     {
         private readonly IApplication app;
+        private readonly bool needToReplace;
+        private readonly ITravelEvent travelEvent;
         private DateTimePicker startPicker;
         private DateTimePicker endPicker;
         private ComboBox eventTypeBox;
@@ -34,7 +37,9 @@ namespace TravelPlanner.UserInterface
 
             if (travelEvent != null)
             {
-                InitElementsText(travelEvent);
+                needToReplace = true;
+                this.travelEvent = travelEvent;
+                InitElementsText();
             }
 
             InitTable(11, 46);
@@ -52,18 +57,18 @@ namespace TravelPlanner.UserInterface
                 subEventTypeBox.DataSource = Enum.GetNames(app.EventHandler.GetEventSubType(eventTypeBox.Text));
             };
             currencyBox = Elements.TypeBox(Enum.GetNames(typeof(Currency)));
-            amountPicker = new NumericUpDown {Dock = DockStyle.Fill, DecimalPlaces = 2, Maximum = 100000};
+            amountPicker = new NumericUpDown {DecimalPlaces = 2, Maximum = 100000};
             cityBoxStart = new MetroTextBox();
             cityBoxEnd = new MetroTextBox();
         }
 
         public AddForm(IApplication app) : this(app, null) { }
 
-        private void InitElementsText(ITravelEvent travelEvent)
+        private void InitElementsText()
         {
             startPicker.Value = travelEvent.DateTimeInterval.Start;
             endPicker.Value = travelEvent.DateTimeInterval.End;
-            eventTypeBox.Text = travelEvent.Name;
+            eventTypeBox.SelectedItem = travelEvent.Name;
             currencyBox.Text = travelEvent.Cost.Currency.ToString();
             amountPicker.Value = travelEvent.Cost.Amount;
         }
@@ -71,10 +76,7 @@ namespace TravelPlanner.UserInterface
         private void InitTable(int rowsCount, int rowSize)
         {
             var table = new TableLayoutPanel();
-            for (var i = 0; i < rowsCount; i++)
-            {
-                table.RowStyles.Add(new RowStyle(SizeType.Absolute, rowSize));
-            }
+            table.AddRows(rowsCount, SizeType.Absolute, rowSize);
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80));
 
@@ -85,41 +87,33 @@ namespace TravelPlanner.UserInterface
 
         private void AddControlsTo(TableLayoutPanel table)
         {
-            AddControlsTo(table,
-                new List<Control>
-                {
-                    eventTypeBox, subEventTypeBox, cityBoxStart, cityBoxEnd, startPicker, endPicker, amountPicker,
-                    currencyBox
-                }, 1, 0);
-            AddControlsTo(table,
-                new List<string>
-                {
-                    "Тип события", "Подтип события", "Место отправления", "Место прибытия", "Дата1", "Дата2",
-                    "Стоимость", "Валюта"
-                }.Select(Elements.GetLabel).ToList(), 0, 0);
+            table.AddControls(new List<Control>
+            {
+                eventTypeBox, subEventTypeBox, cityBoxStart, cityBoxEnd, startPicker, endPicker, amountPicker,
+                currencyBox
+            }, 1, 0);
+            table.AddControls(new List<string>
+            {
+                "Тип события", "Подтип события", "Место отправления", "Место прибытия", "Дата1", "Дата2",
+                "Стоимость", "Валюта"
+            }.Select(Elements.GetLabel).ToList(), 0, 0);
 
             table.Controls.Add(GetNetworkButton(), 0, 8);
             table.Controls.Add(GetSaveButton(), 0, 9);
             table.Controls.Add(Elements.BackButton(this, "Отмена"), 0, 10);
         }
 
-        private void AddControlsTo(TableLayoutPanel table, IReadOnlyList<Control> controls, int column, int rowFrom)
-        {
-            for (var i = 0; i < controls.Count; i++)
-            {
-                controls[i].Dock = DockStyle.Fill;
-                table.Controls.Add(controls[i], column, rowFrom + i);
-            }
-        }
-
         private Button GetSaveButton()
         {
             var saveButton = Elements.GetButton("Сохранить", (sender, args) =>
             {
-                var travelEvent = app.EventHandler.GetEvent(eventTypeBox.Text, 
+                var newEvent = app.EventHandler.GetEvent(eventTypeBox.Text, 
                     startPicker.Value, endPicker.Value,
                     amountPicker.Value, currencyBox.Text, subEventTypeBox.Text);
-                app.UserSessionHandler.AddEvent(travelEvent);
+                if (needToReplace)
+                    app.UserSessionHandler.ReplaceEvent(travelEvent, newEvent);
+                else
+                    app.UserSessionHandler.AddEvent(newEvent);
                 Close();
             });
             saveButton.Dock = DockStyle.Bottom;

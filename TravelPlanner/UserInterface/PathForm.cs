@@ -2,16 +2,15 @@
 using System.Drawing;
 using System.Windows.Forms;
 using TravelPlanner.Application;
-using System.Linq;
+using TravelPlanner.Domain;
 
 namespace TravelPlanner.UserInterface
 {
-    sealed class PathForm : ChooseOptionForm
+    sealed class PathForm : ChooseOptionForm<ITravelEvent>
     {
         private readonly IApplication app;
 
-        public PathForm(IApplication app) : base(
-            () => app.UserSessionHandler.GetTravelEvents().Select(e => e.ToStringValue()).ToList())
+        public PathForm(IApplication app) : base(app.UserSessionHandler.GetTravelEvents)
         {
             this.app = app;
             Size = new Size(800, 600);
@@ -31,26 +30,26 @@ namespace TravelPlanner.UserInterface
             return addButton;
         }
 
-        private Button GetTravelEventButton(string eventName)
+        private Button GetTravelEventButton(ITravelEvent travelEvent)
         {
-            var eventButton = Elements.GetButton(eventName, (sender, args) =>
+            var eventButton = Elements.GetButton(travelEvent.ToStringValue(), (sender, args) =>
             {
-                //app.ChangeCurrentTravel(travelName);
                 Hide();
-                var addForm = new AddForm(app);
+                var addForm = new AddForm(app, travelEvent);
                 addForm.ShowDialog(this);
                 UpdateTable();
                 Show();
             });
-            eventButton.ContextMenuStrip = GetTravelButtonStrip();
+            eventButton.ContextMenuStrip = GetTravelEventButtonStrip();
             return eventButton;
         }
 
-        private ContextMenuStrip GetTravelButtonStrip()
+        private ContextMenuStrip GetTravelEventButtonStrip()
         {
             var contextMenu = new ContextMenuStrip();
             var fix = new ToolStripMenuItem("Зафиксировать");
-            contextMenu.Items.Add(fix);
+            var delete = new ToolStripMenuItem("Удалить");
+            contextMenu.Items.AddRange(new ToolStripItem[] {fix, delete});
             return contextMenu;
         }
 
@@ -70,9 +69,9 @@ namespace TravelPlanner.UserInterface
             };
         }
 
-        protected override Button GetOptionButton(string optionName)
+        protected override Button GetOptionButton(ITravelEvent option)
         {
-            return GetTravelEventButton(optionName);
+            return GetTravelEventButton(option);
         }
     }
 }

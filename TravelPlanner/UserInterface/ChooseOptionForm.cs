@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using MetroFramework.Forms;
+using TravelPlanner.Infrastructure.Extensions;
 
 namespace TravelPlanner.UserInterface
 {
-    public abstract class ChooseOptionForm : MetroForm
+    public abstract class ChooseOptionForm<TOption> : MetroForm
     {
-        private readonly Func<List<string>> getOptions;
+        private readonly Func<List<TOption>> getOptions;
 
-        protected ChooseOptionForm(Func<List<string>> getOptions)
+        protected ChooseOptionForm(Func<List<TOption>> getOptions)
         {
             this.getOptions = getOptions;
             ShadowType = MetroFormShadowType.None;
@@ -44,12 +45,8 @@ namespace TravelPlanner.UserInterface
         {
             var table = new TableLayoutPanel {GrowStyle = TableLayoutPanelGrowStyle.AddRows, AutoSize = true};
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            for (var i = 0; i < buttons.Count; i++)
-            {
-                table.RowStyles.Add(new RowStyle(SizeType.Absolute, rowHeight));
-                buttons[i].Dock = DockStyle.Fill;
-                table.Controls.Add(buttons[i], 0, i);
-            }
+            table.AddRows(buttons.Count, SizeType.Absolute, rowHeight);
+            table.AddControls(buttons, 0, 0);
 
             table.Dock = DockStyle.Top;
             return table;
@@ -66,6 +63,6 @@ namespace TravelPlanner.UserInterface
         }
 
         protected abstract List<Button> GetButtons();
-        protected abstract Button GetOptionButton(string optionName);
+        protected abstract Button GetOptionButton(TOption option);
     }
 }

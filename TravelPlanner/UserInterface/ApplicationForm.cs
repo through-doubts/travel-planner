@@ -5,7 +5,7 @@ using TravelPlanner.Application;
 
 namespace TravelPlanner.UserInterface
 {
-    sealed class ApplicationForm : ChooseOptionForm
+    sealed class ApplicationForm : ChooseOptionForm<string>
     {
         private readonly IApplication app;
 
@@ -47,7 +47,21 @@ namespace TravelPlanner.UserInterface
                 UpdateTable();
                 Show();
             });
+            travelButton.ContextMenuStrip = GetTravelButtonStrip(travelName);
             return travelButton;
+        }
+
+        private ContextMenuStrip GetTravelButtonStrip(string travelName)
+        {
+            var contextMenu = new ContextMenuStrip();
+            var delete = new ToolStripMenuItem("Удалить");
+            delete.Click += (sender, args) =>
+            {
+                app.UserSessionHandler.DeleteTravel(travelName);
+                UpdateTable();
+            };
+            contextMenu.Items.Add(delete);
+            return contextMenu;
         }
 
         protected override List<Button> GetButtons()
