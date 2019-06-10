@@ -15,18 +15,21 @@ namespace TravelPlanner.Domain
         public TransferType Type { get; }
         public string Name => "Перемещение";
         public Type SubTypesType => typeof(TransferType);
+        public Checkpoints Checkpoints { get; }
+
         public string ToStringValue()
         {
-            return Name;
+            return $"{Name} {Checkpoints.From}--{Checkpoints.To}"
         }
 
         public Transfer()
         {
         }
 
-        public Transfer(DateTimeInterval dateTimeInterval, Money cost, TransferType type)
+        public Transfer(DateTimeInterval dateTimeInterval, Checkpoints checkpoints, Money cost, TransferType type)
         {
             DateTimeInterval = dateTimeInterval;
+            Checkpoints = checkpoints;
             Cost = cost;
             Type = type;
         }

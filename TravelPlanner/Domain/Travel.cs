@@ -23,6 +23,11 @@ namespace TravelPlanner.Domain
             events.Add(travelEvent);
         }
 
+        public void DeleteEvent(ITravelEvent travelEvent)
+        {
+            events.Remove(travelEvent);
+        }
+
         public void ReplaceEvent(ITravelEvent oldTravelEvent, ITravelEvent newTravelEvent)
         {
             var index = events.IndexOf(oldTravelEvent);

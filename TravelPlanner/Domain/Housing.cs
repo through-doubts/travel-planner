@@ -12,22 +12,24 @@ namespace TravelPlanner.Domain
         public DateTimeInterval DateTimeInterval { get; }
         public Money Cost { get; }
         public HousingType Type { get; }
-        public string Name => "Жилье";
+        public string Name => "Проживание";
         public Type SubTypesType => typeof(HousingType);
+        public Checkpoints Checkpoints { get; }
         public string ToStringValue()
         {
-            return Name; 
+            return $"{Name} {Checkpoints.Stop}";
         }
 
         public Housing()
         {
         }
 
-        public Housing(DateTimeInterval dateTimeInterval, Money cost, HousingType type)
+        public Housing(DateTimeInterval dateTimeInterval, Checkpoints checkpoints, Money cost, HousingType type)
         {
             DateTimeInterval = dateTimeInterval;
             Cost = cost;
             Type = type;
+            Checkpoints = checkpoints;
         }
     }
 

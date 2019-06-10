@@ -85,6 +85,7 @@
     <Compile Include="Application\TravelEventHandler.cs" />
     <Compile Include="Application\User.cs" />
     <Compile Include="Application\UserSessionHandler.cs" />
+    <Compile Include="Domain\Checkpoints.cs" />
     <Compile Include="Domain\Housing.cs" />
     <Compile Include="Domain\ITravelEvent.cs" />
     <Compile Include="Domain\Location.cs" />

@@ -47,6 +47,11 @@ namespace TravelPlanner.Application
             currentTravel.AddEvent(travelEvent);
         }
 
+        public void DeleteEvent(ITravelEvent travelEvent)
+        {
+            currentTravel.DeleteEvent(travelEvent);
+        }
+
         public void ReplaceEvent(ITravelEvent oldTravelEvent, ITravelEvent newTravelEvent)
         {
             currentTravel.ReplaceEvent(oldTravelEvent, newTravelEvent);
