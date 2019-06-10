@@ -15,6 +15,7 @@ namespace TravelPlanner.Application
         List<string> GetTravelsNames();
 
         void AddEvent(ITravelEvent travelEvent);
+        void DeleteEvent(ITravelEvent travelEvent);
         void ReplaceEvent(ITravelEvent oldTravelEvent, ITravelEvent newTravelEvent);
         List<ITravelEvent> GetTravelEvents();
     }

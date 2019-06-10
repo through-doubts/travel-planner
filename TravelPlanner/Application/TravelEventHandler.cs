@@ -23,6 +23,13 @@ namespace TravelPlanner.Application
             return travelEvents.Select(e => e.Name).OrderBy(n => n).ToList();
         }
 
+        private ITravelEvent GetTravelEventExemplar(string eventName)
+        {
+            var eventType = GetEventType(eventName);
+            var constructor = eventType.GetConstructor(new Type[0]);
+            return (ITravelEvent)constructor.Invoke(new object[0]);
+        }
+
         public Type GetEventType(string eventName)
         {
             var foundEvent = travelEvents.FirstOrDefault(e => e.Name == eventName);
@@ -33,9 +40,7 @@ namespace TravelPlanner.Application
 
         public Type GetEventSubType(string eventName)
         {
-            var eventType = GetEventType(eventName);
-            var constructor = eventType.GetConstructor(new Type[0]);
-            var travelEvent = (ITravelEvent)constructor.Invoke(new object[0]);
+            var travelEvent = GetTravelEventExemplar(eventName);
             return travelEvent.SubTypesType;
         }
 
@@ -54,14 +59,35 @@ namespace TravelPlanner.Application
         }
 
         public ITravelEvent GetEvent(
-            string name, DateTime startDate, DateTime endDate, 
+            string name, DateTime startDate, DateTime endDate, Location[] locations,
             decimal amountOfMoney, string currency, string eventSubType)
         {
             var interval = new DateTimeInterval(startDate, endDate);
             var parsedCurrency = (Currency) Enum.Parse(typeof(Currency), currency);
             var money = new Money(parsedCurrency, amountOfMoney);
             var parsedEventSubType = Enum.Parse(GetEventSubType(name), eventSubType);
-            return GetEvent(name, interval, money, parsedEventSubType);
+            var checkpoints = GetCheckpoints(locations, name);
+            return GetEvent(name, interval, checkpoints, money, parsedEventSubType);
+        }
+
+        private Checkpoints GetCheckpoints(Location[] locations, string eventName)
+        {
+            var travelEvent = GetTravelEventExemplar(eventName);
+            Checkpoints checkpoint = null;
+            switch (travelEvent.CheckpointType)
+            {
+                case CheckpointType.Stop:
+                    if (locations.Length != 1)
+                        throw new ArgumentException($"Should be one location for TravelEvent {eventName}");
+                    checkpoint = new Checkpoints(locations[0]);
+                    break;
+                case CheckpointType.Transfer:
+                    if (locations.Length != 2)
+                        throw new ArgumentException($"Should be two locations for TravelEvent {eventName}");
+                    checkpoint = new Checkpoints(locations[0], locations[1]);
+                    break;
+            }
+            return checkpoint;
         }
     }
 }
