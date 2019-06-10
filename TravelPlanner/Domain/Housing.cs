@@ -15,6 +15,8 @@ namespace TravelPlanner.Domain
         public string Name => "Проживание";
         public Type SubTypesType => typeof(HousingType);
         public Checkpoints Checkpoints { get; }
+        public CheckpointType CheckpointType => CheckpointType.Stop;
+
         public string ToStringValue()
         {
             return $"{Name} {Checkpoints.Stop}";

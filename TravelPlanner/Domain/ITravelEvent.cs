@@ -14,6 +14,7 @@ namespace TravelPlanner.Domain
         string Name { get; }
         Type SubTypesType { get; }
         Checkpoints Checkpoints { get; }
+        CheckpointType CheckpointType { get; }
         string ToStringValue();
         
 

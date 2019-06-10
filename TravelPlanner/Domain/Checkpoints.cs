@@ -8,11 +8,6 @@ namespace TravelPlanner.Domain
 {
     public class Checkpoints
     {
-        private enum CheckpointType
-        {
-            Stop,
-            Transfer
-        }
 
         private CheckpointType checkpointType;
         private readonly Location from;
@@ -62,5 +57,11 @@ namespace TravelPlanner.Domain
         }
     }
 
-    
+    public enum CheckpointType
+    {
+        Stop,
+        Transfer
+    }
+
+
 }

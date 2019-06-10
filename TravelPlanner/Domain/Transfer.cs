@@ -16,10 +16,11 @@ namespace TravelPlanner.Domain
         public string Name => "Перемещение";
         public Type SubTypesType => typeof(TransferType);
         public Checkpoints Checkpoints { get; }
+        public CheckpointType CheckpointType => CheckpointType.Transfer;
 
         public string ToStringValue()
         {
-            return $"{Name} {Checkpoints.From}--{Checkpoints.To}"
+            return $"{Name} {Checkpoints.From}--{Checkpoints.To}";
         }
 
         public Transfer()

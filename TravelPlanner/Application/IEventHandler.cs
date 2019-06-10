@@ -15,7 +15,8 @@ namespace TravelPlanner.Application
         ITravelEvent GetEvent(string name, params object[] parameters);
         ITravelEvent GetEvent(
             string name, 
-            DateTime startDate, DateTime endDate, 
+            DateTime startDate, DateTime endDate,
+            Location[] locations,
             decimal amountOfMoney, string currency,
             string eventSubType);
 

@@ -30,8 +30,9 @@ namespace TravelPlanner.Application.Tests
             var dateTimeInterval = new DateTimeInterval(DateTime.Now, DateTime.Now);
             var cost = new Money(Currency.RUB, 10);
             var type = TransferType.Bus;
+            var checkpoints = new Checkpoints(null, null);
 
-            var transfer = new Transfer(dateTimeInterval, cost, type);
+            var transfer = new Transfer(dateTimeInterval, checkpoints, cost, type);
             var housing = new Housing();
             var events = new ITravelEvent[] { transfer, housing };
             var eventHandler = new TravelEventHandler(events);
