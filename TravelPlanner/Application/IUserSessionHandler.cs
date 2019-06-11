@@ -9,14 +9,9 @@ namespace TravelPlanner.Application
 {
     public interface IUserSessionHandler
     {
-        void AddTravel(string travelName);
-        void DeleteTravel(string travelName);
-        void ChangeCurrentTravel(string travelName);
-        List<string> GetTravelsNames();
+        ListHandler<Travel> Travels { get; }
+        ListHandler<ITravelEvent> CurrentTravelEvents { get; }
 
-        void AddEvent(ITravelEvent travelEvent);
-        void DeleteEvent(ITravelEvent travelEvent);
-        void ReplaceEvent(ITravelEvent oldTravelEvent, ITravelEvent newTravelEvent);
-        List<ITravelEvent> GetTravelEvents();
+        void ChangeCurrentTravel(Travel travel);
     }
 }
