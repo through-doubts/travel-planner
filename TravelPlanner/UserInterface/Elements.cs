@@ -50,8 +50,9 @@ namespace TravelPlanner.UserInterface
             Name = name
         };
 
-        public static MetroTextBox CityBox(IEnumerable<string> cities) => new MetroTextBox
+        public static MetroTextBox CityBox(IEnumerable<string> cities, string name="") => new MetroTextBox
         {
+            Name = name,
             AutoCompleteMode = AutoCompleteMode.SuggestAppend,
             AutoCompleteSource = AutoCompleteSource.CustomSource,
             AutoCompleteCustomSource = cities.ToAutoCompleteStringCollection()

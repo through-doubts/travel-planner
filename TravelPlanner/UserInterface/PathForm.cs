@@ -9,10 +9,12 @@ namespace TravelPlanner.UserInterface
     sealed class PathForm : ChooseOptionForm<ITravelEvent>
     {
         private readonly IApplication app;
+        private readonly TravelEventFormFactory addFormFactory;
 
-        public PathForm(IApplication app) : base(app.UserSessionHandler.GetTravelEvents)
+        public PathForm(IApplication app, TravelEventFormFactory addFormFactory) : base(app.UserSessionHandler.GetTravelEvents)
         {
             this.app = app;
+            this.addFormFactory = addFormFactory;
             Size = new Size(800, 600);
             Text = "События";
         }
@@ -22,8 +24,7 @@ namespace TravelPlanner.UserInterface
             var addButton = Elements.GetButton("Добавить событие", (sender, args) =>
             {
                 Hide();
-                var addForm = new AddForm(app);
-                addForm.ShowDialog(this);
+                addFormFactory.CreateAddForm().ShowDialog(this);
                 Show();
                 UpdateTable();
             });
@@ -35,8 +36,7 @@ namespace TravelPlanner.UserInterface
             var eventButton = Elements.GetButton(travelEvent.ToStringValue(), (sender, args) =>
             {
                 Hide();
-                var addForm = new AddForm(app, travelEvent);
-                addForm.ShowDialog(this);
+                addFormFactory.CreateEditForm(travelEvent).ShowDialog(this);
                 UpdateTable();
                 Show();
             });

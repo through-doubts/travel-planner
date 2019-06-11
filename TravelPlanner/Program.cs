@@ -8,6 +8,7 @@ using TravelPlanner.Infrastructure;
 using TravelPlanner.UserInterface;
 using TravelPlanner.Properties;
 using Ninject;
+using TravelPlanner.Infrastructure.Countries;
 
 namespace TravelPlanner
 {
@@ -22,7 +23,11 @@ namespace TravelPlanner
             var application = GetApplication();
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
-            System.Windows.Forms.Application.Run(new ApplicationForm(application));
+            System.Windows.Forms.Application.Run(new ApplicationForm(application,
+                new PathFormFactory(application,
+                    new TravelEventFormFactory(application,
+                        new GeographicDatabase(ExcelReader.TableToListOfRows(new MemoryStream(Resources.countries),
+                            Encoding.GetEncoding("windows-1251"))).GetAllCities()))));
         }
 
         static IApplication GetApplication()

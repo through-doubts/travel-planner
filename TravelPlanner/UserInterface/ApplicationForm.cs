@@ -8,10 +8,12 @@ namespace TravelPlanner.UserInterface
     sealed class ApplicationForm : ChooseOptionForm<string>
     {
         private readonly IApplication app;
+        private readonly PathFormFactory pathFormFactory;
 
-        public ApplicationForm(IApplication app) : base(app.UserSessionHandler.GetTravelsNames)
+        public ApplicationForm(IApplication app, PathFormFactory pathFormFactory) : base(app.UserSessionHandler.GetTravelsNames)
         {
             this.app = app;
+            this.pathFormFactory = pathFormFactory;
             Size = new Size(800, 600);
             Text = "Путешествия";
         }
@@ -28,7 +30,7 @@ namespace TravelPlanner.UserInterface
                     return;
                 Hide();
                 app.UserSessionHandler.AddTravel(name);
-                var pathForm = new PathForm(app);
+                var pathForm = pathFormFactory.CreatePathForm();
                 pathForm.ShowDialog(this);
                 UpdateTable();
                 Show();
@@ -42,7 +44,7 @@ namespace TravelPlanner.UserInterface
             {
                 app.UserSessionHandler.ChangeCurrentTravel(travelName);
                 Hide();
-                var pathForm = new PathForm(app);
+                var pathForm = pathFormFactory.CreatePathForm();
                 pathForm.ShowDialog(this);
                 UpdateTable();
                 Show();

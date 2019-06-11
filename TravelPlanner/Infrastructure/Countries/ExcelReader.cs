@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 using ExcelDataReader;
 
-namespace TravelPlanner.Infrastructure
+namespace TravelPlanner.Infrastructure.Countries
 {
     public class ExcelReader
     {
-        public static IEnumerable<List<string>> TableToListOfRows(Stream stream, Encoding encoding)
+        public static IEnumerable<Dictionary<string, object>> TableToListOfRows(Stream stream, Encoding encoding)
         { 
             using (var reader = ExcelReaderFactory.CreateReader(stream, new ExcelReaderConfiguration
             {
@@ -26,8 +27,9 @@ namespace TravelPlanner.Infrastructure
                 var dataSet = reader.AsDataSet(conf);
                 foreach (DataRow row in dataSet.Tables[0].Rows)
                 {
-                    yield return dataSet.Tables[0].Columns.OfType<DataColumn>().Select(x => row[x.ColumnName])
-                        .Where(x => x is string s && s.Length > 0).OfType<string>().ToList();
+                    yield return dataSet.Tables[0].Columns.OfType<DataColumn>()
+                        .Select(x => Tuple.Create(x.ColumnName, row[x.ColumnName]))
+                        .ToDictionary(x => x.Item1, x => x.Item2);
                 }
             }
         }
