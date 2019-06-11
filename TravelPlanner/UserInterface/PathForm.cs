@@ -40,15 +40,19 @@ namespace TravelPlanner.UserInterface
                 UpdateTable();
                 Show();
             });
-            eventButton.ContextMenuStrip = GetTravelEventButtonStrip();
+            eventButton.ContextMenuStrip = GetTravelEventButtonStrip(travelEvent);
             return eventButton;
         }
 
-        private ContextMenuStrip GetTravelEventButtonStrip()
+        private ContextMenuStrip GetTravelEventButtonStrip(ITravelEvent travelEvent)
         {
             var contextMenu = new ContextMenuStrip();
             var fix = new ToolStripMenuItem("Зафиксировать");
             var delete = new ToolStripMenuItem("Удалить");
+            delete.Click += (sender, args) =>
+            {
+                app.UserSessionHandler.DeleteEvent(travelEvent);
+            };
             contextMenu.Items.AddRange(new ToolStripItem[] {fix, delete});
             return contextMenu;
         }

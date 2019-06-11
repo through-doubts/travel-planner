@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using MetroFramework.Controls;
-using MetroFramework.Forms;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
 using TravelPlanner.Infrastructure;
@@ -12,7 +11,7 @@ using TravelPlanner.Infrastructure.Extensions;
 
 namespace TravelPlanner.UserInterface
 {
-    sealed class AddForm : MetroForm
+    sealed class AddForm : FormWithTable
     {
         private readonly IApplication app;
         private readonly bool needToReplace;
@@ -23,14 +22,12 @@ namespace TravelPlanner.UserInterface
         private ComboBox subEventTypeBox;
         private ComboBox currencyBox;
         private NumericUpDown amountPicker;
-        private MetroTextBox cityBoxStart;
-        private MetroTextBox cityBoxEnd;
+        private List<MetroTextBox> locationBoxes;
 
         public AddForm(IApplication app, ITravelEvent travelEvent)
         {
             this.app = app;
             Size = new Size(800, 600);
-            ShadowType = MetroFormShadowType.None;
             Text = "Событие";
 
             InitControls();
@@ -42,24 +39,28 @@ namespace TravelPlanner.UserInterface
                 InitElementsText();
             }
 
-            InitTable(11, 46);
+            Controls.Add(InitTable());
         }
 
         private void InitControls()
         {
-            startPicker = Elements.GeTimePicker();
-            endPicker = Elements.GeTimePicker();
-            eventTypeBox = Elements.TypeBox(app.EventHandler.GetEventsNames());
+            startPicker = Elements.GeTimePicker("Дата1");
+            endPicker = Elements.GeTimePicker("Дата2");
+            eventTypeBox = Elements.TypeBox(app.EventHandler.GetEventsNames(), "Тип события");
             subEventTypeBox = Elements.TypeBox(
-                Enum.GetNames(app.EventHandler.GetEventSubType(app.EventHandler.GetEventsNames()[0])));
+                Enum.GetNames(app.EventHandler.GetEventSubType(app.EventHandler.GetEventsNames()[0])),
+                "Подтип события");
             eventTypeBox.SelectedIndexChanged += (sender, args) =>
             {
                 subEventTypeBox.DataSource = Enum.GetNames(app.EventHandler.GetEventSubType(eventTypeBox.Text));
             };
-            currencyBox = Elements.TypeBox(Enum.GetNames(typeof(Currency)));
-            amountPicker = new NumericUpDown {DecimalPlaces = 2, Maximum = 100000};
-            cityBoxStart = new MetroTextBox();
-            cityBoxEnd = new MetroTextBox();
+            currencyBox = Elements.TypeBox(Enum.GetNames(typeof(Currency)), "Валюта");
+            amountPicker = new NumericUpDown {DecimalPlaces = 2, Maximum = 100000, Name = "Стоимость"};
+            locationBoxes = new List<MetroTextBox>
+            {
+                new MetroTextBox {Name = "Место отправления"},
+                new MetroTextBox {Name = "Место прибытия"}
+            };
         }
 
         public AddForm(IApplication app) : this(app, null) { }
@@ -73,41 +74,48 @@ namespace TravelPlanner.UserInterface
             amountPicker.Value = travelEvent.Cost.Amount;
         }
 
-        private void InitTable(int rowsCount, int rowSize)
+        protected override TableLayoutPanel InitTable()
         {
-            var table = new TableLayoutPanel();
-            table.AddRows(rowsCount, SizeType.Absolute, rowSize);
+            var table = new TableLayoutPanel {GrowStyle = TableLayoutPanelGrowStyle.AddRows, AutoSize = true};
+            var controls = GetControls();
+            var buttons = GetButtons();
+
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20));
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80));
+            table.AddControlsToRows(controls, 1, 0, SizeType.Absolute, 46);
+            table.AddControls(controls.Select(c => c.Name).Select(Elements.GetLabel).ToList(), 0, 0);
+            table.AddControlsToRows(buttons, 0, controls.Count, SizeType.Absolute, 46);
 
-            AddControlsTo(table);
-            table.Dock = DockStyle.Fill;
-            Controls.Add(table);
+            table.Dock = DockStyle.Top;
+            return table;
         }
 
-        private void AddControlsTo(TableLayoutPanel table)
+        private List<Control> GetControls()
         {
-            table.AddControls(new List<Control>
+            var controls = new List<Control>
             {
-                eventTypeBox, subEventTypeBox, cityBoxStart, cityBoxEnd, startPicker, endPicker, amountPicker,
+                eventTypeBox, subEventTypeBox, startPicker, endPicker, amountPicker,
                 currencyBox
-            }, 1, 0);
-            table.AddControls(new List<string>
-            {
-                "Тип события", "Подтип события", "Место отправления", "Место прибытия", "Дата1", "Дата2",
-                "Стоимость", "Валюта"
-            }.Select(Elements.GetLabel).ToList(), 0, 0);
+            };
+            controls.InsertRange(2, locationBoxes);
+            return controls;
+        }
 
-            table.Controls.Add(GetNetworkButton(), 0, 8);
-            table.Controls.Add(GetSaveButton(), 0, 9);
-            table.Controls.Add(Elements.BackButton(this, "Отмена"), 0, 10);
+        private List<Button> GetButtons()
+        {
+            return new List<Button>
+            {
+                GetNetworkButton(),
+                GetSaveButton(),
+                Elements.BackButton(this, "Отмена")
+            };
         }
 
         private Button GetSaveButton()
         {
             var saveButton = Elements.GetButton("Сохранить", (sender, args) =>
             {
-                var newEvent = app.EventHandler.GetEvent(eventTypeBox.Text, 
+                var newEvent = app.EventHandler.GetEvent(eventTypeBox.Text,
                     startPicker.Value, endPicker.Value,
                     amountPicker.Value, currencyBox.Text, subEventTypeBox.Text);
                 if (needToReplace)

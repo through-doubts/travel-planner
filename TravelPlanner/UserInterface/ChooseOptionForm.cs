@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using MetroFramework.Forms;
 using TravelPlanner.Infrastructure.Extensions;
 
 namespace TravelPlanner.UserInterface
 {
-    public abstract class ChooseOptionForm<TOption> : MetroForm
+    public abstract class ChooseOptionForm<TOption> : FormWithTable
     {
         private readonly Func<List<TOption>> getOptions;
 
         protected ChooseOptionForm(Func<List<TOption>> getOptions)
         {
             this.getOptions = getOptions;
-            ShadowType = MetroFormShadowType.None;
             Controls.Add(InitTable());
         }
 
-        protected TableLayoutPanel InitTable()
+        protected sealed override TableLayoutPanel InitTable()
         {
             var majorTable = new TableLayoutPanel();
             majorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70));
@@ -45,21 +43,10 @@ namespace TravelPlanner.UserInterface
         {
             var table = new TableLayoutPanel {GrowStyle = TableLayoutPanelGrowStyle.AddRows, AutoSize = true};
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            table.AddRows(buttons.Count, SizeType.Absolute, rowHeight);
-            table.AddControls(buttons, 0, 0);
+            table.AddControlsToRows(buttons, 0, 0, SizeType.Absolute, rowHeight);
 
             table.Dock = DockStyle.Top;
             return table;
-        }
-
-        protected void UpdateTable()
-        {
-            var newTable = InitTable();
-            foreach (Control control in Controls)
-            {
-                if (control is TableLayoutPanel) Controls.Remove(control);
-            }
-            Controls.Add(newTable);
         }
 
         protected abstract List<Button> GetButtons();

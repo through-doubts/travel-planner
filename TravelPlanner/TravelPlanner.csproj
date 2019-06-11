@@ -130,6 +130,9 @@
     <Compile Include="UserInterface\EnterForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\FormWithTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\PathForm.cs">
       <SubType>Form</SubType>
     </Compile>

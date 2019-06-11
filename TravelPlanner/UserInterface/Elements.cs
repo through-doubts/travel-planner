@@ -10,12 +10,13 @@ namespace TravelPlanner.UserInterface
 {
     class Elements
     {
-        public static ComboBox TypeBox(IEnumerable<string> items)
+        public static ComboBox TypeBox(IEnumerable<string> items, string name="")
         {
             var box = new MetroComboBox
             {
                 Dock = DockStyle.Fill,
-                DropDownStyle = ComboBoxStyle.DropDownList
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Name = name
             };
             box.Items.AddRange(items.OfType<object>().ToArray());
             box.SelectedIndex = 0;
@@ -42,10 +43,11 @@ namespace TravelPlanner.UserInterface
             return button;
         }
 
-        public static DateTimePicker GeTimePicker() => new DateTimePicker
+        public static DateTimePicker GeTimePicker(string name="") => new DateTimePicker
         {
             Format = DateTimePickerFormat.Custom,
-            CustomFormat = "MM/dd/yyyy hh:mm:ss"
+            CustomFormat = "MM/dd/yyyy hh:mm:ss",
+            Name = name
         };
 
         public static MetroTextBox CityBox(IEnumerable<string> cities) => new MetroTextBox

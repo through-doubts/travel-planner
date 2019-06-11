@@ -21,5 +21,13 @@ namespace TravelPlanner.Infrastructure.Extensions
                 table.RowStyles.Add(new RowStyle(sizeType, size));
             }
         }
+
+        public static void AddControlsToRows(
+            this TableLayoutPanel table, IReadOnlyList<Control> controls, int column, int rowFrom,
+            SizeType rowSizeType, int rowSize)
+        {
+            table.AddRows(controls.Count, rowSizeType, rowSize);
+            table.AddControls(controls, column, rowFrom);
+        }
     }
 }
