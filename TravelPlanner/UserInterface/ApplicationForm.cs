@@ -5,19 +5,22 @@ using TravelPlanner.Application;
 
 namespace TravelPlanner.UserInterface
 {
-    class ApplicationForm : ChooseOptionForm
+    sealed class ApplicationForm : ChooseOptionForm<string>
     {
         private readonly IApplication app;
+        private readonly PathFormFactory pathFormFactory;
 
-        public ApplicationForm(IApplication app) : base(app.UserSessionHandler.GetTravelsNames)
+        public ApplicationForm(IApplication app, PathFormFactory pathFormFactory) : base(app.UserSessionHandler.GetTravelsNames)
         {
             this.app = app;
+            this.pathFormFactory = pathFormFactory;
             Size = new Size(800, 600);
+            Text = "Путешествия";
         }
 
         private Button GetAddButton()
         {
-            var addButton = Elements.GetButton("Добавить", (sender, args) =>
+            var addButton = Elements.GetButton("Добавить путешествие", (sender, args) =>
             {
                 string name;
                 var enterForm = new EnterForm();
@@ -27,12 +30,11 @@ namespace TravelPlanner.UserInterface
                     return;
                 Hide();
                 app.UserSessionHandler.AddTravel(name);
-                var pathForm = new PathForm(app);
+                var pathForm = pathFormFactory.CreatePathForm();
                 pathForm.ShowDialog(this);
                 UpdateTable();
                 Show();
             });
-            addButton.Dock = DockStyle.Fill;
             return addButton;
         }
 
@@ -42,18 +44,31 @@ namespace TravelPlanner.UserInterface
             {
                 app.UserSessionHandler.ChangeCurrentTravel(travelName);
                 Hide();
-                var pathForm = new PathForm(app);
+                var pathForm = pathFormFactory.CreatePathForm();
                 pathForm.ShowDialog(this);
                 UpdateTable();
                 Show();
             });
-            travelButton.Dock = DockStyle.Fill;
+            travelButton.ContextMenuStrip = GetTravelButtonStrip(travelName);
             return travelButton;
         }
 
-        protected override IEnumerable<Button> GetButtons()
+        private ContextMenuStrip GetTravelButtonStrip(string travelName)
         {
-            yield return GetAddButton();
+            var contextMenu = new ContextMenuStrip();
+            var delete = new ToolStripMenuItem("Удалить");
+            delete.Click += (sender, args) =>
+            {
+                app.UserSessionHandler.DeleteTravel(travelName);
+                UpdateTable();
+            };
+            contextMenu.Items.Add(delete);
+            return contextMenu;
+        }
+
+        protected override List<Button> GetButtons()
+        {
+            return new List<Button> {GetAddButton()};
         }
 
         protected override Button GetOptionButton(string optionName)

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace TravelPlanner.Infrastructure
+namespace TravelPlanner.Infrastructure.Extensions
 {
     public static class EnumerableExtensions
     {

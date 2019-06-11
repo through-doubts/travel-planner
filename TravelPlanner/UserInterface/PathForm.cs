@@ -2,19 +2,21 @@
 using System.Drawing;
 using System.Windows.Forms;
 using TravelPlanner.Application;
-using System.Linq;
+using TravelPlanner.Domain;
 
 namespace TravelPlanner.UserInterface
 {
-    class PathForm : ChooseOptionForm
+    sealed class PathForm : ChooseOptionForm<ITravelEvent>
     {
         private readonly IApplication app;
+        private readonly TravelEventFormFactory addFormFactory;
 
-        public PathForm(IApplication app) : base(
-            () => app.UserSessionHandler.GetTravelEvents().Select(e => e.ToStringValue()).ToList())
+        public PathForm(IApplication app, TravelEventFormFactory addFormFactory) : base(app.UserSessionHandler.GetTravelEvents)
         {
             this.app = app;
+            this.addFormFactory = addFormFactory;
             Size = new Size(800, 600);
+            Text = "События";
         }
 
         private Button GetAddButton()
@@ -22,56 +24,58 @@ namespace TravelPlanner.UserInterface
             var addButton = Elements.GetButton("Добавить событие", (sender, args) =>
             {
                 Hide();
-                var addForm = new AddForm(app);
-                addForm.ShowDialog(this);
+                addFormFactory.CreateAddForm().ShowDialog(this);
                 Show();
                 UpdateTable();
             });
-            addButton.Dock = DockStyle.Fill;
             return addButton;
         }
 
-        private Button GetTravelEventButton(string eventName)
+        private Button GetTravelEventButton(ITravelEvent travelEvent)
         {
-            var eventButton = Elements.GetButton(eventName, (sender, args) =>
+            var eventButton = Elements.GetButton(travelEvent.ToStringValue(), (sender, args) =>
             {
-                //app.ChangeCurrentTravel(travelName);
                 Hide();
-                var addForm = new AddForm(app);
-                addForm.ShowDialog(this);
+                addFormFactory.CreateEditForm(travelEvent).ShowDialog(this);
                 UpdateTable();
                 Show();
             });
-            eventButton.ContextMenuStrip = GetTravelButtonStrip();
-            eventButton.Dock = DockStyle.Fill;
+            eventButton.ContextMenuStrip = GetTravelEventButtonStrip(travelEvent);
             return eventButton;
         }
 
-        private ContextMenuStrip GetTravelButtonStrip()
+        private ContextMenuStrip GetTravelEventButtonStrip(ITravelEvent travelEvent)
         {
             var contextMenu = new ContextMenuStrip();
             var fix = new ToolStripMenuItem("Зафиксировать");
-            contextMenu.Items.Add(fix);
+            var delete = new ToolStripMenuItem("Удалить");
+            delete.Click += (sender, args) =>
+            {
+                app.UserSessionHandler.DeleteEvent(travelEvent);
+            };
+            contextMenu.Items.AddRange(new ToolStripItem[] {fix, delete});
             return contextMenu;
         }
 
         private Button GetUpdateButton()
         {
             var updateButton = Elements.GetButton("Обновить", (sender, args) => { });
-            updateButton.Dock = DockStyle.Fill;
             return updateButton;
         }
 
-        protected override IEnumerable<Button> GetButtons()
+        protected override List<Button> GetButtons()
         {
-            yield return GetAddButton();
-            yield return GetUpdateButton();
-            yield return Elements.BackButton(this, "Назад");
+            return new List<Button>
+            {
+                GetAddButton(),
+                GetUpdateButton(),
+                Elements.BackButton(this, "Назад")
+            };
         }
 
-        protected override Button GetOptionButton(string optionName)
+        protected override Button GetOptionButton(ITravelEvent option)
         {
-            return GetTravelEventButton(optionName);
+            return GetTravelEventButton(option);
         }
     }
 }

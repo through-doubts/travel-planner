@@ -1,54 +1,55 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
-using MetroFramework.Forms;
+using TravelPlanner.Infrastructure.Extensions;
 
 namespace TravelPlanner.UserInterface
 {
-    public abstract class ChooseOptionForm : MetroForm
+    public abstract class ChooseOptionForm<TOption> : FormWithTable
     {
-        private readonly Func<List<string>> getOptions;
+        private readonly Func<List<TOption>> getOptions;
 
-        protected ChooseOptionForm(Func<List<string>> getOptions)
+        protected ChooseOptionForm(Func<List<TOption>> getOptions)
         {
             this.getOptions = getOptions;
-            ShadowType = MetroFormShadowType.None;
             Controls.Add(InitTable());
         }
 
-        protected TableLayoutPanel InitTable()
+        protected sealed override TableLayoutPanel InitTable()
         {
-            var table = new TableLayoutPanel { GrowStyle = TableLayoutPanelGrowStyle.AddRows };
+            var majorTable = new TableLayoutPanel();
+            majorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70));
+            majorTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));
+
+            majorTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+
+            majorTable.Controls.Add(InitOptionsTable(), 0, 0);
+            majorTable.Controls.Add(InitMenuTable(), 1, 0);
+            majorTable.Dock = DockStyle.Fill;
+            return majorTable;
+        }
+
+        private TableLayoutPanel InitMenuTable() => InitButtonTable(GetButtons(), 100);
+
+        private TableLayoutPanel InitOptionsTable()
+        {
+            var optionsTable = InitButtonTable(getOptions().Select(GetOptionButton).ToList(), 100);
+            optionsTable.AutoScroll = true;
+            return optionsTable;
+        }
+
+        private TableLayoutPanel InitButtonTable(List<Button> buttons, int rowHeight)
+        {
+            var table = new TableLayoutPanel {GrowStyle = TableLayoutPanelGrowStyle.AddRows, AutoSize = true};
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            var options = getOptions();
-            for (var i = 0; i < options.Count; i++)
-            {
-                table.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));
-                table.Controls.Add(GetOptionButton(options[i]), 0, i);
-            }
+            table.AddControlsToRows(buttons, 0, 0, SizeType.Absolute, rowHeight);
 
-            foreach (var button in GetButtons())
-            {
-                table.Controls.Add(button);
-            }
-
-            table.Dock = DockStyle.Fill;
-            table.AutoScroll = true;
+            table.Dock = DockStyle.Top;
             return table;
         }
 
-        protected void UpdateTable()
-        {
-            var newTable = InitTable();
-            foreach (Control control in Controls)
-            {
-                if (control is TableLayoutPanel) Controls.Remove(control);
-            }
-            Controls.Add(newTable);
-        }
-
-        protected abstract IEnumerable<Button> GetButtons();
-        protected abstract Button GetOptionButton(string optionName);
+        protected abstract List<Button> GetButtons();
+        protected abstract Button GetOptionButton(TOption option);
     }
 }
