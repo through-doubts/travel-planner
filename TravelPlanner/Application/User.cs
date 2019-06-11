@@ -10,32 +10,11 @@ namespace TravelPlanner.Application
 {
     public class User : Entity<int>
     {
-        private readonly List<Travel> travels;
+        public  List<Travel> Travels { get; }
 
         public User(int id) : base(id)
         {
-            travels = new List<Travel>();
-        }
-
-        public void AddTravel(Travel travel)
-        {
-            travels.Add(travel);
-        }
-
-        public Travel GetTravel(string travelName)
-        {
-            return travels.FirstOrDefault(t => t.Name == travelName);
-        }
-
-        public void DeleteTravel(string travelName)
-        {
-            var travel = GetTravel(travelName);
-            travels.Remove(travel);
-        }
-
-        public List<string> GetTravelsNames()
-        {
-            return travels.Select(t => t.Name).ToList();
+            Travels = new List<Travel>();
         }
     }
 }
