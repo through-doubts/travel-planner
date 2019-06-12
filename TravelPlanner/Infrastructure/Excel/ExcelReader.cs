@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using ExcelDataReader;
 
-namespace TravelPlanner.Infrastructure.Countries
+namespace TravelPlanner.Infrastructure.Excel
 {
     public class ExcelReader
     {

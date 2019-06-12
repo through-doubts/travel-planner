@@ -5,7 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using TravelPlanner.Domain;
-using TravelPlanner.Infrastructure.Countries;
+using TravelPlanner.Infrastructure.Excel;
 using TravelPlanner.Properties;
 
 namespace TravelPlanner.Application
@@ -37,6 +37,11 @@ namespace TravelPlanner.Application
         public IEnumerable<string> GetLocationsNames()
         {
             return citiesCoordinates.Keys;
+        }
+
+        public bool CityExists(string name)
+        {
+            return citiesCoordinates.ContainsKey(name);
         }
     }
 }

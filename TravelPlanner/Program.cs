@@ -10,7 +10,6 @@ using TravelPlanner.Infrastructure;
 using TravelPlanner.UserInterface;
 using TravelPlanner.Properties;
 using Ninject;
-using TravelPlanner.Infrastructure.Countries;
 using TravelPlanner.UserInterface.EventForms;
 
 namespace TravelPlanner

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using MetroFramework;
 using MetroFramework.Controls;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
@@ -133,13 +134,29 @@ namespace TravelPlanner.UserInterface.EventForms
             return networkButton;
         }
 
-        protected ITravelEvent CreateEvent()
+        protected bool TryCreateEvent(out ITravelEvent travelEvent)
         {
-            return App.EventFabric.Get(EventTypeBox.Text,
-                new[] {StartPicker.Value, EndPicker.Value},
-                LocationBoxes.Select(x => App.LocationHandler.GetLocationByName(x.Text)).ToArray(),
-                new Money((Currency) Enum.Parse(typeof(Currency), CurrencyBox.Text), AmountPicker.Value),
-                SubEventTypeBox.Text);
+            var result = LocationBoxes.Select(x => x.Text).All(x => App.LocationHandler.CityExists(x));
+            if (result)
+            {
+                travelEvent = App.EventFabric.Get(EventTypeBox.Text,
+                    new[] {StartPicker.Value, EndPicker.Value},
+                    LocationBoxes.Select(x => App.LocationHandler.GetLocationByName(x.Text)).ToArray(),
+                    new Money((Currency) Enum.Parse(typeof(Currency), CurrencyBox.Text), AmountPicker.Value),
+                    SubEventTypeBox.Text);
+            }
+            else
+            {
+                travelEvent = null;
+            }
+
+            return result;
+        }
+
+        protected void ShowCreateEventError()
+        {
+            MetroMessageBox.Show(this, "Не удалось создать событие, проверьте входные данные",
+                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
 
@@ -33,7 +32,11 @@ namespace TravelPlanner.UserInterface.EventForms
         {
             return (sender, args) =>
             {
-                var newEvent = CreateEvent();
+                if (!TryCreateEvent(out var newEvent))
+                {
+                    ShowCreateEventError();
+                    return;
+                }
                 App.UserSessionHandler.CurrentTravelEvents.Replace(travelEvent, newEvent);
                 Close();
             };
