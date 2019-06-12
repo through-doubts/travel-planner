@@ -10,5 +10,7 @@ namespace TravelPlanner.Application
     public interface ILocationHandler
     {
         Location GetLocationByName(string name);
+
+        IEnumerable<string> GetLocationsNames();
     }
 }

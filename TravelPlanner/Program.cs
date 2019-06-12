@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
@@ -9,6 +11,7 @@ using TravelPlanner.UserInterface;
 using TravelPlanner.Properties;
 using Ninject;
 using TravelPlanner.Infrastructure.Countries;
+using TravelPlanner.UserInterface.EventForms;
 
 namespace TravelPlanner
 {
@@ -21,13 +24,12 @@ namespace TravelPlanner
         static void Main()
         {
             var application = GetApplication();
+            var travelEventFormFactory = new TravelEventFormFactory(application);
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
             System.Windows.Forms.Application.Run(new ApplicationForm(application,
-                new PathFormFactory(application,
-                    new TravelEventFormFactory(application,
-                        new GeographicDatabase(ExcelReader.TableToListOfRows(new MemoryStream(Resources.countries),
-                            Encoding.GetEncoding("windows-1251"))).GetAllCities()))));
+                () => new PathForm(application, travelEventFormFactory),
+                s => new EnterForm(s)));
         }
 
         static IApplication GetApplication()

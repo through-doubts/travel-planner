@@ -10,10 +10,10 @@ namespace TravelPlanner.UserInterface
         private readonly Button okButton;
         private readonly TextBox box;
 
-        public EnterForm()
+        public EnterForm(string text)
         {
             ShadowType = MetroFormShadowType.None;
-            Text = "Введите имя";
+            Text = text;
             Size = new Size(300, 200);
             Resizable = false;
             MaximizeBox = false;
@@ -40,6 +40,13 @@ namespace TravelPlanner.UserInterface
 
             table.Dock = DockStyle.Fill;
             Controls.Add(table);
+        }
+
+        public static bool TryShowAndGetValue(Form innerForm,EnterForm enterForm, out string value)
+        {
+            var result = enterForm.ShowDialog(innerForm) == DialogResult.OK;
+            value = enterForm.SelectedText;
+            return result;
         }
     }
 }

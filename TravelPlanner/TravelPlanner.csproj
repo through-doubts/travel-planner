@@ -101,9 +101,8 @@
     <Compile Include="Domain\TravelEvent.cs" />
     <Compile Include="Infrastructure\Currency.cs" />
     <Compile Include="Infrastructure\Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Infrastructure\Countries\ExcelReader.cs" />
+    <Compile Include="Infrastructure\Excel\ExcelReader.cs" />
     <Compile Include="Infrastructure\Extensions\TableLayoutPanelExtensions.cs" />
-    <Compile Include="Infrastructure\Countries\GeographicDatabase.cs" />
     <Compile Include="Infrastructure\Network\AirportsFinder\AirportsFinder.cs" />
     <Compile Include="Infrastructure\Network\Currency\CurrencyApi.cs" />
     <Compile Include="Infrastructure\Network\Currency\ICurrencyDataProvider.cs" />
@@ -123,13 +122,13 @@
     <Compile Include="Infrastructure\Network\Skyscanner\SkyscannerApi.cs" />
     <Compile Include="Infrastructure\Network\Skyscanner\SkyscannerApiParameters.cs" />
     <Compile Include="Infrastructure\ValueType.cs" />
-    <Compile Include="UserInterface\AddEventForm.cs">
+    <Compile Include="UserInterface\EventForms\AddEventForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\EditEventForm.cs">
+    <Compile Include="UserInterface\EventForms\EditEventForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\TravelEventFormFactory.cs" />
+    <Compile Include="UserInterface\EventForms\TravelEventFormFactory.cs" />
     <Compile Include="UserInterface\ApplicationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,8 +147,7 @@
     <Compile Include="UserInterface\PathForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserInterface\PathFormFactory.cs" />
-    <Compile Include="UserInterface\TravelEventForm.cs">
+    <Compile Include="UserInterface\EventForms\TravelEventForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
