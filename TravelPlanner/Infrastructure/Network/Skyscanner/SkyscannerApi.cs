@@ -29,7 +29,8 @@ namespace TravelPlanner.Infrastructure.Network.Skyscanner
                 {"pageIndex", "0" },
                 {"pageSize", "10" }
             };
-            var response = SendRequestAndReturnResponse(Method.GET, GetHeaders(), getParameters, GetResource, Url);
+            var response =
+                SendRequestAndReturnResponse(Method.GET, GetHeaders(), getParameters, GetResource + location, Url);
             return response.Content;
         }
 
