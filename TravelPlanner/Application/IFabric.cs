@@ -7,10 +7,8 @@ using TravelPlanner.Domain;
 
 namespace TravelPlanner.Application
 {
-    public interface IEventHandler
+    public interface IFabric<T>
     {
-        List<string> GetEventsNames();
-        Type GetEventType(string eventName);
-        string[] GetEventSubTypes(string eventName);
+        T Get(string name, params object[] parameters);
     }
 }
