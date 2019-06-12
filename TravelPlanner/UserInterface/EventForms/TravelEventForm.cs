@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using MetroFramework;
 using MetroFramework.Controls;
 using TravelPlanner.Application;
+using TravelPlanner.Domain;
 using TravelPlanner.Infrastructure;
 using TravelPlanner.Infrastructure.Extensions;
 
-namespace TravelPlanner.UserInterface
+namespace TravelPlanner.UserInterface.EventForms
 {
     abstract class TravelEventForm : FormWithTable
     {
         protected readonly IApplication App;
-        protected readonly IEnumerable<string> Cities;
         protected DateTimePicker StartPicker;
         protected DateTimePicker EndPicker;
         protected ComboBox EventTypeBox;
@@ -22,10 +23,9 @@ namespace TravelPlanner.UserInterface
         protected NumericUpDown AmountPicker;
         protected List<MetroTextBox> LocationBoxes;
 
-        protected TravelEventForm(IApplication app, IEnumerable<string> cities)
+        protected TravelEventForm(IApplication app)
         {
-            this.App = app;
-            Cities = cities;
+            App = app;
             Size = new Size(800, 600);
             Text = "Событие";
 
@@ -46,19 +46,39 @@ namespace TravelPlanner.UserInterface
             EndPicker = Elements.GeTimePicker("Дата2");
             EventTypeBox = Elements.TypeBox(App.EventHandler.GetEventsNames(), "Тип события");
             SubEventTypeBox = Elements.TypeBox(
-                Enum.GetNames(App.EventHandler.GetEventSubType(App.EventHandler.GetEventsNames()[0])),
+                App.EventHandler.GetEventSubTypes(App.EventHandler.GetEventsNames()[0]),
                 "Подтип события");
             EventTypeBox.SelectedIndexChanged += (sender, args) =>
             {
-                SubEventTypeBox.DataSource = Enum.GetNames(App.EventHandler.GetEventSubType(EventTypeBox.Text));
+                SubEventTypeBox.DataSource = App.EventHandler.GetEventSubTypes(EventTypeBox.Text);
+                LocationBoxes = GetLocationBoxes(EventTypeBox.Text);
+                UpdateTable();
             };
             CurrencyBox = Elements.TypeBox(Enum.GetNames(typeof(Currency)), "Валюта");
             AmountPicker = new NumericUpDown { DecimalPlaces = 2, Maximum = 100000, Name = "Стоимость" };
-            LocationBoxes = new List<MetroTextBox>
+            LocationBoxes = GetLocationBoxes(EventTypeBox.Text);
+        }
+
+        private List<MetroTextBox> GetLocationBoxes(string eventName)
+        {
+            var eventType = App.EventHandler.GetEventType(eventName);
+            var cities = App.LocationHandler.GetLocationsNames().ToArray();
+            if (eventType == typeof(Housing))
             {
-                Elements.CityBox(Cities, "Место отправления"),
-                Elements.CityBox(Cities, "Место прибытия")
-            };
+                return new List<MetroTextBox>
+                {
+                    Elements.CityBox(cities, "Место остановки")
+                };
+            }
+            if (eventType == typeof(Transfer))
+            {
+                return new List<MetroTextBox>
+                {
+                    Elements.CityBox(cities, "Место отправления"),
+                    Elements.CityBox(cities, "Место прибытия")
+                };
+            }
+            throw new ArgumentException(eventName);
         }
 
         protected sealed override TableLayoutPanel InitTable()
@@ -98,13 +118,45 @@ namespace TravelPlanner.UserInterface
             };
         }
 
-        protected abstract Button GetSaveButton();
+        protected abstract EventHandler GetSaveButtonHandler();
+
+        private Button GetSaveButton()
+        {
+            var saveButton = Elements.GetButton("Сохранить", GetSaveButtonHandler());
+            saveButton.Dock = DockStyle.Bottom;
+            return saveButton;
+        }
 
         private Button GetNetworkButton()
         {
             var networkButton = Elements.GetButton("Посмотреть варианты в сети", (sender, args) => { });
             networkButton.Dock = DockStyle.Fill;
             return networkButton;
+        }
+
+        protected bool TryCreateEvent(out ITravelEvent travelEvent)
+        {
+            var result = LocationBoxes.Select(x => x.Text).All(x => App.LocationHandler.CityExists(x));
+            if (result)
+            {
+                travelEvent = App.EventFabric.Get(EventTypeBox.Text,
+                    new[] {StartPicker.Value, EndPicker.Value},
+                    LocationBoxes.Select(x => App.LocationHandler.GetLocationByName(x.Text)).ToArray(),
+                    new Money((Currency) Enum.Parse(typeof(Currency), CurrencyBox.Text), AmountPicker.Value),
+                    SubEventTypeBox.Text);
+            }
+            else
+            {
+                travelEvent = null;
+            }
+
+            return result;
+        }
+
+        protected void ShowCreateEventError()
+        {
+            MetroMessageBox.Show(this, "Не удалось создать событие, проверьте входные данные",
+                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

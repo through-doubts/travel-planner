@@ -3,18 +3,20 @@ using System.Drawing;
 using System.Windows.Forms;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
+using TravelPlanner.UserInterface.EventForms;
 
 namespace TravelPlanner.UserInterface
 {
     sealed class PathForm : ChooseOptionForm<ITravelEvent>
     {
         private readonly IApplication app;
-        private readonly TravelEventFormFactory addFormFactory;
+        private readonly TravelEventFormFactory travelEventFormFactory;
 
-        public PathForm(IApplication app, TravelEventFormFactory addFormFactory) : base(app.UserSessionHandler.GetTravelEvents)
+        public PathForm(IApplication app, TravelEventFormFactory travelEventFormFactory) : 
+            base(app.UserSessionHandler.CurrentTravelEvents.GetItems)
         {
             this.app = app;
-            this.addFormFactory = addFormFactory;
+            this.travelEventFormFactory = travelEventFormFactory;
             Size = new Size(800, 600);
             Text = "События";
         }
@@ -24,9 +26,9 @@ namespace TravelPlanner.UserInterface
             var addButton = Elements.GetButton("Добавить событие", (sender, args) =>
             {
                 Hide();
-                addFormFactory.CreateAddForm().ShowDialog(this);
-                Show();
+                travelEventFormFactory.CreateAddForm().ShowDialog(this);
                 UpdateTable();
+                Show();
             });
             return addButton;
         }
@@ -36,7 +38,7 @@ namespace TravelPlanner.UserInterface
             var eventButton = Elements.GetButton(travelEvent.ToStringValue(), (sender, args) =>
             {
                 Hide();
-                addFormFactory.CreateEditForm(travelEvent).ShowDialog(this);
+                travelEventFormFactory.CreateEditForm(travelEvent).ShowDialog(this);
                 UpdateTable();
                 Show();
             });
@@ -51,7 +53,7 @@ namespace TravelPlanner.UserInterface
             var delete = new ToolStripMenuItem("Удалить");
             delete.Click += (sender, args) =>
             {
-                app.UserSessionHandler.DeleteEvent(travelEvent);
+                app.UserSessionHandler.CurrentTravelEvents.Delete(travelEvent);
             };
             contextMenu.Items.AddRange(new ToolStripItem[] {fix, delete});
             return contextMenu;
