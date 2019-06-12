@@ -9,11 +9,13 @@ namespace TravelPlanner.Domain
 {
     public interface ITravelEvent : INameable
     {
-        DateTimeInterval DateTimeInterval { get; }
+        string[] PossibleTypes { get; }
+
+        DateTime[] Dates { get; }
         Money Cost { get; }
-        Type SubTypesType { get; }
-        Checkpoints Checkpoints { get; }
-        CheckpointType CheckpointType { get; }
+        Location[] Locations { get; }
+        string Type { get; }
+
         string ToStringValue();
     }
 }

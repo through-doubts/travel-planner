@@ -13,6 +13,9 @@ namespace TravelPlanner.Application
     {
         IEventHandler EventHandler { get; }
         IUserSessionHandler UserSessionHandler { get; }
+        IFabric<ITravelEvent> EventFabric { get; }
+        IFabric<Travel> TravelFabric { get; }
+        ILocationHandler LocationHandler { get; }
 
     }
 }

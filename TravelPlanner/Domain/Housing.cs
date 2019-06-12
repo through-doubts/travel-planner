@@ -7,39 +7,24 @@ using TravelPlanner.Infrastructure;
 
 namespace TravelPlanner.Domain
 {
-    public class Housing : ValueType<Housing>, ITravelEvent
+    public class Housing : TravelEvent
     {
-        public DateTimeInterval DateTimeInterval { get; }
-        public Money Cost { get; }
-        public HousingType Type { get; }
-        public string Name => "Проживание";
-        public Type SubTypesType => typeof(HousingType);
-        public Checkpoints Checkpoints { get; }
-        public CheckpointType CheckpointType => CheckpointType.Stop;
+        private const string name = "Проживание";
+        private static readonly string[] possibleTypes = {"Отель", "Хостел", "Комната", "Апартаменты"};
 
-        public string ToStringValue()
+        public override string ToStringValue()
         {
-            return $"{Name} {Checkpoints.Stop}";
+            return $"{Name} {Locations[0]}";
         }
 
-        public Housing()
+        public Housing() : base(name, possibleTypes)
         {
         }
 
-        public Housing(DateTimeInterval dateTimeInterval, Checkpoints checkpoints, Money cost, HousingType type)
+        public Housing(DateTime[] dates, Location[] locations, Money cost, string type) : 
+            base(dates, locations, cost, type, name, possibleTypes)
         {
-            DateTimeInterval = dateTimeInterval;
-            Cost = cost;
-            Type = type;
-            Checkpoints = checkpoints;
         }
-    }
-
-    public enum HousingType
-    {
-        Hotel,
-        Hostel, 
-        Room, 
-        Apartment
+        
     }
 }
