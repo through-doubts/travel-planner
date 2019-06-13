@@ -120,7 +120,33 @@ namespace TravelPlanner.UserInterface.EventForms
 
         private Button GetNetworkButton()
         {
-            var networkButton = Elements.GetButton("Посмотреть варианты в сети", (sender, args) => { });
+            var networkButton = Elements.GetButton("Посмотреть варианты в сети", (sender, args) =>
+            {
+                if (App.EventHandler.GetEventType(EventTypeBox.Text) != typeof(Transfer))
+                {
+                    ShowCreateEventError("Не реализовано");
+                    return;
+                }
+
+                if (!LocationBoxes.Select(x => x.Text).All(x => App.LocationHandler.CityExists(x)))
+                {
+                    ShowCreateEventError("Не удалось определить город");
+                    return;
+                }
+                var listForm = new TravelEventListForm((() => App.NetworkDataHandler.GetTransfers(
+                        CurrencyBox.Text, LocationBoxes[0].Text, LocationBoxes[1].Text,
+                        DateTimePickers[0].Value)),
+                    "Доступные события",
+                    App);
+                Hide();
+                if (listForm.ShowDialog(this) == DialogResult.OK)
+                {
+                    Close();
+                    return;
+                }
+                UpdateTable();
+                Show();
+            });
             networkButton.Dock = DockStyle.Fill;
             return networkButton;
         }
@@ -144,9 +170,9 @@ namespace TravelPlanner.UserInterface.EventForms
             return result;
         }
 
-        protected void ShowCreateEventError()
+        protected void ShowCreateEventError(string message)
         {
-            MetroMessageBox.Show(this, "Не удалось создать событие, проверьте входные данные",
+            MetroMessageBox.Show(this, message,
                 "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }

@@ -13,12 +13,14 @@ namespace TravelPlanner.Application
     public class LocationHandler : ILocationHandler
     {
         private readonly Dictionary<string, GeoCoordinate> citiesCoordinates;
+        private readonly Dictionary<string, string> citiesInEnglish;
 
         public LocationHandler()
         {
             var citiesInfo = ExcelReader.TableToListOfRows(new MemoryStream(Resources.countries),
                 Encoding.GetEncoding("windows-1251"));
             citiesCoordinates = new Dictionary<string, GeoCoordinate>();
+            citiesInEnglish = new Dictionary<string, string>();
             foreach (var entry in citiesInfo)
             {
                 var city = (string)entry["city"];
@@ -26,6 +28,8 @@ namespace TravelPlanner.Application
                 var lon = Convert.ToDouble(entry["lng"], CultureInfo.InvariantCulture);
                 if (!citiesCoordinates.ContainsKey(city))
                     citiesCoordinates.Add(city, new GeoCoordinate(lat, lon));
+                if (!citiesInEnglish.ContainsKey(city))
+                    citiesInEnglish.Add(city, (string) entry["city_en"]);
             }
         }
 
@@ -42,6 +46,11 @@ namespace TravelPlanner.Application
         public bool CityExists(string name)
         {
             return citiesCoordinates.ContainsKey(name);
+        }
+
+        public string GetCityNameInEnglish(string name)
+        {
+            return citiesInEnglish[name];
         }
     }
 }

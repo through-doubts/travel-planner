@@ -30,7 +30,7 @@ namespace TravelPlanner.Infrastructure.Network
             var request = GetRequest(method, headers, parameters, resource);
 
             var response = client.Execute(request);
-            if (!response.IsSuccessful) throw new NetworkException(response.ErrorMessage);
+            if (!response.IsSuccessful) throw new NetworkException(response.Content);
             return response;
         }
     }

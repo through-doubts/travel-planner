@@ -10,6 +10,11 @@ using TravelPlanner.Infrastructure;
 using TravelPlanner.UserInterface;
 using TravelPlanner.Properties;
 using Ninject;
+using TravelPlanner.Application.Network;
+using TravelPlanner.Application.Network.AirportsFinder;
+using TravelPlanner.Application.Network.Amadeus;
+using TravelPlanner.Application.Network.Skyscanner;
+using TravelPlanner.Infrastructure.Network;
 using TravelPlanner.UserInterface.EventForms;
 
 namespace TravelPlanner
@@ -39,6 +44,10 @@ namespace TravelPlanner
             container.Bind<IFabric<ITravelEvent>>().To<EventFabric>();
             container.Bind<IFabric<Travel>>().To<TravelFabric>();
             container.Bind<ILocationHandler>().To<LocationHandler>();
+            container.Bind<INetworkDataHandler>().To<NetworkDataHandler>();
+            container.Bind<ITransportDataProvider>().To<SkyscannerApi>();
+            container.Bind<IHousingDataProvider>().To<AmadeusApi>();
+            container.Bind<IAirportCodeFinder>().To<AirportCodeFinder>();
             container.Bind<User>().ToConstant(new User(1));
             container.Bind<ITravelEvent>().To<Housing>();
             container.Bind<ITravelEvent>().To<Transfer>();

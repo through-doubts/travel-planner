@@ -15,7 +15,7 @@ namespace TravelPlanner.UserInterface.EventForms
             {
                 if (!TryCreateEvent(out var newEvent))
                 {
-                    ShowCreateEventError();
+                    ShowCreateEventError("Не удалось создать событие, проверьте входные данные");
                     return;
                 }
                 App.UserSessionHandler.CurrentTravelEvents.Add(newEvent);

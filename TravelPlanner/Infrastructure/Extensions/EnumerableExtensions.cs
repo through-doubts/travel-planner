@@ -28,5 +28,11 @@ namespace TravelPlanner.Infrastructure.Extensions
 
             return objectArray;
         }
+
+        public static IEnumerable<Tuple<T1, T2>> Pairs<T1, T2>
+            (this IEnumerable<T1> enumerable, IEnumerable<T2> other)
+        {
+            return from item in enumerable from otherItem in other select Tuple.Create(item, otherItem);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace TravelPlanner.Infrastructure.Network
 {
-    public interface INetworkDataUpdater : INetworkDataProvider<string>
+    public interface IHttpDataProvider<TResponse>
     {
         
     }
