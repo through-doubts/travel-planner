@@ -22,9 +22,14 @@ namespace TravelPlanner.Application
             return travelEvents.Select(e => e.Name).OrderBy(n => n).ToList();
         }
 
+        private ITravelEvent GetEventExemplar(string eventName)
+        {
+            return travelEvents.FirstOrDefault(e => e.Name == eventName);
+        }
+
         public Type GetEventType(string eventName)
         {
-            var foundEvent = travelEvents.FirstOrDefault(e => e.Name == eventName);
+            var foundEvent = GetEventExemplar(eventName);
             if (foundEvent == null)
                 throw new ArgumentException($"Unknown event name: {eventName}");
             return foundEvent.GetType();
@@ -32,8 +37,17 @@ namespace TravelPlanner.Application
 
         public string[] GetEventSubTypes(string eventName)
         {
-            var foundEvent = travelEvents.FirstOrDefault(e => e.Name == eventName);
-            return foundEvent.PossibleTypes;
+            return GetEventExemplar(eventName).PossibleTypes;
+        }
+
+        public string[] GetEventLocationsHeaders(string eventName)
+        {
+            return GetEventExemplar(eventName).LocationsHeaders;
+        }
+
+        public string[] GetEventDatesHeaders(string eventName)
+        {
+            return GetEventExemplar(eventName).DatesHeaders;
         }
     }
 }
