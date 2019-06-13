@@ -11,6 +11,21 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,6 +45,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
@@ -85,6 +103,11 @@
     <Compile Include="Application\ListHandler.cs" />
     <Compile Include="Application\LocationHandler.cs" />
     <Compile Include="Application\MainApplication.cs" />
+    <Compile Include="Application\NetworkDataHandler.cs" />
+    <Compile Include="Application\Network\AirportsFinder\IAirportCodeFinder.cs" />
+    <Compile Include="Application\Network\HttpDataProvider.cs" />
+    <Compile Include="Application\INetworkDataHandler.cs" />
+    <Compile Include="Application\Network\Skyscanner\SkyscannerResponse.cs" />
     <Compile Include="Application\Tests\MainApplication_should.cs" />
     <Compile Include="Application\Tests\TravelEventHandler_should.cs" />
     <Compile Include="Application\TravelEventHandler.cs" />
@@ -100,27 +123,28 @@
     <Compile Include="Domain\Travel.cs" />
     <Compile Include="Domain\TravelEvent.cs" />
     <Compile Include="Infrastructure\Currency.cs" />
+    <Compile Include="Infrastructure\Direction.cs" />
     <Compile Include="Infrastructure\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Infrastructure\Excel\ExcelReader.cs" />
     <Compile Include="Infrastructure\Extensions\TableLayoutPanelExtensions.cs" />
-    <Compile Include="Infrastructure\Network\AirportsFinder\AirportsFinder.cs" />
-    <Compile Include="Infrastructure\Network\Currency\CurrencyApi.cs" />
-    <Compile Include="Infrastructure\Network\Currency\ICurrencyDataProvider.cs" />
-    <Compile Include="Infrastructure\Network\IHousingDataProvider.cs" />
+    <Compile Include="Application\Network\AirportsFinder\AirportCodeFinder.cs" />
+    <Compile Include="Application\Network\Currency\CurrencyApi.cs" />
+    <Compile Include="Application\Network\Currency\ICurrencyDataProvider.cs" />
+    <Compile Include="Application\Network\IHousingDataProvider.cs" />
     <Compile Include="Infrastructure\Money.cs" />
     <Compile Include="Infrastructure\DateTimeInterval.cs" />
     <Compile Include="Infrastructure\Entity.cs" />
-    <Compile Include="Infrastructure\Network\Amadeus\AmadeusApi.cs" />
-    <Compile Include="Infrastructure\Network\Amadeus\AmadeusParameters.cs" />
-    <Compile Include="Infrastructure\Network\HousingParameters.cs" />
-    <Compile Include="Infrastructure\Network\INetworkDataUpdater.cs" />
+    <Compile Include="Application\Network\Amadeus\AmadeusApi.cs" />
+    <Compile Include="Application\Network\Amadeus\AmadeusParameters.cs" />
+    <Compile Include="Application\Network\HousingParameters.cs" />
+    <Compile Include="Infrastructure\Network\IHttpDataProvider.cs" />
     <Compile Include="Infrastructure\Network\NetworkException.cs" />
-    <Compile Include="Infrastructure\Network\TransportParameters.cs" />
+    <Compile Include="Application\Network\TransportParameters.cs" />
     <Compile Include="Infrastructure\Network\HttpApi.cs" />
-    <Compile Include="Infrastructure\Network\ITransportDataProvider.cs" />
-    <Compile Include="Infrastructure\Network\INetworkDataProvider.cs" />
-    <Compile Include="Infrastructure\Network\Skyscanner\SkyscannerApi.cs" />
-    <Compile Include="Infrastructure\Network\Skyscanner\SkyscannerApiParameters.cs" />
+    <Compile Include="Application\Network\ITransportDataProvider.cs" />
+    <Compile Include="Application\Network\INetworkDataProvider.cs" />
+    <Compile Include="Application\Network\Skyscanner\SkyscannerApi.cs" />
+    <Compile Include="Application\Network\Skyscanner\SkyscannerApiParameters.cs" />
     <Compile Include="Infrastructure\ValueType.cs" />
     <Compile Include="UserInterface\EventForms\AddEventForm.cs">
       <SubType>Form</SubType>
@@ -148,6 +172,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserInterface\EventForms\TravelEventForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\TravelEventListForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -178,6 +205,20 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 и x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="rapidapi-key.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,5 +10,7 @@ namespace TravelPlanner.Application
         IEnumerable<string> GetLocationsNames();
 
         bool CityExists(string name);
+
+        string GetCityNameInEnglish(string name);
     }
 }

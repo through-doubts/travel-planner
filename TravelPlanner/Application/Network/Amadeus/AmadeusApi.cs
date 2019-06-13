@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using RestSharp;
+using TravelPlanner.Domain;
+using TravelPlanner.Infrastructure.Network;
 
-namespace TravelPlanner.Infrastructure.Network.Amadeus
+namespace TravelPlanner.Application.Network.Amadeus
 {
-    public class AmadeusApi : HttpApi, IHousingDataProvider, INetworkDataUpdater
+    public class AmadeusApi : HttpDataProvider, IHousingDataProvider
     {
         private const string Url = "https://amadeus-developers-test.apigee.net";
         private const string AuthResource = "v1/security/oauth2/token";
@@ -15,22 +17,27 @@ namespace TravelPlanner.Infrastructure.Network.Amadeus
         private static readonly string ClientSecret = Environment.GetEnvironmentVariable("amadeus-secret");
         private const string GrantType = "client_credentials";
 
+        public AmadeusApi(HttpApi httpApi) : base(httpApi)
+        {
+
+        }
+
         public string GetData(string parameters)
         {
             var headers = GetHeaders();
             var resource = $"v1/shopping/hotels/{parameters}/hotel-offers";
             var response =
-                SendRequestAndReturnResponse(Method.GET, headers, new Dictionary<string, string>(), resource, Url);
+                SendRequestAndGetResponse(Method.GET, headers, new Dictionary<string, string>(), resource, Url);
             return response.Content;
         }
 
-        public string GetData(HousingParameters parameters)
+        public List<Housing> GetData(HousingParameters parameters)
         {
             var headers = GetHeaders();
             var amadeusParameters = AmadeusParameters.FromHousingParameters(parameters);
-            var response = SendRequestAndReturnResponse(
+            var response = SendRequestAndGetResponse(
                 Method.GET, headers, amadeusParameters, SearchResource, Url);
-            return response.Content;
+            return null;
         }
 
         private Dictionary<string, string> GetHeaders()
@@ -41,7 +48,8 @@ namespace TravelPlanner.Infrastructure.Network.Amadeus
                 {"client_secret", ClientSecret },
                 {"grant_type", GrantType }
             };
-            var response = SendRequestAndReturnResponse(Method.POST, new Dictionary<string, string>(), authParameters,
+            var response = SendRequestAndGetResponse(Method.POST, new Dictionary<string, string>(),
+                authParameters,
                 AuthResource, Url);
             var token = SimpleJson.DeserializeObject<Dictionary<string, object>>(response.Content)["access_token"];
             return new Dictionary<string, string>

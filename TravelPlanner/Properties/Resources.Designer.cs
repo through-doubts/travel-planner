@@ -69,5 +69,14 @@ namespace TravelPlanner.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 5e1b6e0ce2mshf8d7bf48452442dp1fda98jsn9ef336f6b389.
+        /// </summary>
+        internal static string rapidapi_key {
+            get {
+                return ResourceManager.GetString("rapidapi_key", resourceCulture);
+            }
+        }
     }
 }

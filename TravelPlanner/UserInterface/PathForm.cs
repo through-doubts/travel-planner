@@ -51,9 +51,11 @@ namespace TravelPlanner.UserInterface
             var contextMenu = new ContextMenuStrip();
             var fix = new ToolStripMenuItem("Зафиксировать");
             var delete = new ToolStripMenuItem("Удалить");
+            fix.Click += (sender, args) => { app.UserSessionHandler.FixateEventPrice(travelEvent); };
             delete.Click += (sender, args) =>
             {
                 app.UserSessionHandler.CurrentTravelEvents.Delete(travelEvent);
+                UpdateTable();
             };
             contextMenu.Items.AddRange(new ToolStripItem[] {fix, delete});
             return contextMenu;
@@ -61,7 +63,11 @@ namespace TravelPlanner.UserInterface
 
         private Button GetUpdateButton()
         {
-            var updateButton = Elements.GetButton("Обновить", (sender, args) => { });
+            var updateButton = Elements.GetButton("Обновить", (sender, args) =>
+                {
+                    app.NetworkDataHandler.UpdatePrices(app.UserSessionHandler.CurrentTravelEvents.GetItems());
+                    UpdateTable();
+                });
             return updateButton;
         }
 
