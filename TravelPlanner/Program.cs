@@ -40,7 +40,7 @@ namespace TravelPlanner
         {
             var container = new StandardKernel();
             container.Bind<IEventHandler>().To<TravelEventHandler>();
-            container.Bind<IUserSessionHandler>().To<UserSessionHandler>();
+            container.Bind<IUserSessionHandler>().To<UserSessionHandler>().InSingletonScope();
             container.Bind<IFabric<ITravelEvent>>().To<EventFabric>();
             container.Bind<IFabric<Travel>>().To<TravelFabric>();
             container.Bind<ILocationHandler>().To<LocationHandler>();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TravelPlanner.Application.Network;
 using TravelPlanner.Application.Network.AirportsFinder;
 using TravelPlanner.Domain;
@@ -14,15 +15,17 @@ namespace TravelPlanner.Application
         private readonly IHousingDataProvider housingDataProvider;
         private readonly IAirportCodeFinder airportCodeFinder;
         private readonly ILocationHandler locationHandler;
+        private readonly IUserSessionHandler userSessionHandler;
 
         public NetworkDataHandler(ITransportDataProvider transportDataProvider,
             IHousingDataProvider housingDataProvider, IAirportCodeFinder airportCodeFinder,
-            ILocationHandler locationHandler)
+            ILocationHandler locationHandler, IUserSessionHandler userSessionHandler)
         {
             this.transportDataProvider = transportDataProvider;
             this.housingDataProvider = housingDataProvider;
             this.airportCodeFinder = airportCodeFinder;
             this.locationHandler = locationHandler;
+            this.userSessionHandler = userSessionHandler;
         }
 
         public List<ITravelEvent> GetTransfers(string currency, string originPlace, string destinationPlace,
@@ -46,6 +49,26 @@ namespace TravelPlanner.Application
             }
 
             return travelEvents;
+        }
+
+        public void UpdatePrices(List<ITravelEvent> travelEvents)
+        {
+            foreach (var travelEvent in travelEvents.Where(t => !userSessionHandler.EventPriceIsFixated(t))
+                .Where(t => t.Name == "Перемещение"))
+            {
+                var others = GetTransfers(travelEvent.Cost.Currency.ToString(), travelEvent.Locations[0].Name,
+                    travelEvent.Locations[1].Name, travelEvent.Dates[0]);
+                foreach (var other in others)
+                {
+                    if (other.Type == travelEvent.Type &&
+                        other.Dates.SequenceEqual(travelEvent.Dates) &&
+                        other.Locations.SequenceEqual(travelEvent.Locations))
+                    {
+                        userSessionHandler.CurrentTravelEvents.Replace(travelEvent, other);
+                        return;
+                    }
+                }
+            }
         }
     }
 }

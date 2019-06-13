@@ -63,7 +63,11 @@ namespace TravelPlanner.UserInterface
 
         private Button GetUpdateButton()
         {
-            var updateButton = Elements.GetButton("Обновить", (sender, args) => { });
+            var updateButton = Elements.GetButton("Обновить", (sender, args) =>
+                {
+                    app.NetworkDataHandler.UpdatePrices(app.UserSessionHandler.CurrentTravelEvents.GetItems());
+                    UpdateTable();
+                });
             return updateButton;
         }
 

@@ -103,7 +103,7 @@
     <Compile Include="Application\NetworkDataHandler.cs" />
     <Compile Include="Application\Network\AirportsFinder\IAirportCodeFinder.cs" />
     <Compile Include="Application\Network\HttpDataProvider.cs" />
-    <Compile Include="Application\Network\INetworkDataHandler.cs" />
+    <Compile Include="Application\INetworkDataHandler.cs" />
     <Compile Include="Application\Network\Skyscanner\SkyscannerResponse.cs" />
     <Compile Include="Application\Tests\MainApplication_should.cs" />
     <Compile Include="Application\Tests\TravelEventHandler_should.cs" />
