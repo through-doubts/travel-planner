@@ -15,8 +15,7 @@ namespace TravelPlanner.UserInterface.EventForms
     abstract class TravelEventForm : FormWithTable
     {
         protected readonly IApplication App;
-        protected DateTimePicker StartPicker;
-        protected DateTimePicker EndPicker;
+        protected List<DateTimePicker> DateTimePickers;
         protected ComboBox EventTypeBox;
         protected ComboBox SubEventTypeBox;
         protected ComboBox CurrencyBox;
@@ -42,8 +41,6 @@ namespace TravelPlanner.UserInterface.EventForms
 
         private void InitControls()
         {
-            StartPicker = Elements.GeTimePicker("Дата1");
-            EndPicker = Elements.GeTimePicker("Дата2");
             EventTypeBox = Elements.TypeBox(App.EventHandler.GetEventsNames(), "Тип события");
             SubEventTypeBox = Elements.TypeBox(
                 App.EventHandler.GetEventSubTypes(App.EventHandler.GetEventsNames()[0]),
@@ -51,9 +48,11 @@ namespace TravelPlanner.UserInterface.EventForms
             EventTypeBox.SelectedIndexChanged += (sender, args) =>
             {
                 SubEventTypeBox.DataSource = App.EventHandler.GetEventSubTypes(EventTypeBox.Text);
+                DateTimePickers = GetDateTimePickers(EventTypeBox.Text);
                 LocationBoxes = GetLocationBoxes(EventTypeBox.Text);
                 UpdateTable();
             };
+            DateTimePickers = GetDateTimePickers(EventTypeBox.Text);
             CurrencyBox = Elements.TypeBox(Enum.GetNames(typeof(Currency)), "Валюта");
             AmountPicker = new NumericUpDown { DecimalPlaces = 2, Maximum = 100000, Name = "Стоимость" };
             LocationBoxes = GetLocationBoxes(EventTypeBox.Text);
@@ -61,24 +60,15 @@ namespace TravelPlanner.UserInterface.EventForms
 
         private List<MetroTextBox> GetLocationBoxes(string eventName)
         {
-            var eventType = App.EventHandler.GetEventType(eventName);
             var cities = App.LocationHandler.GetLocationsNames().ToArray();
-            if (eventType == typeof(Housing))
-            {
-                return new List<MetroTextBox>
-                {
-                    Elements.CityBox(cities, "Место остановки")
-                };
-            }
-            if (eventType == typeof(Transfer))
-            {
-                return new List<MetroTextBox>
-                {
-                    Elements.CityBox(cities, "Место отправления"),
-                    Elements.CityBox(cities, "Место прибытия")
-                };
-            }
-            throw new ArgumentException(eventName);
+            return App.EventHandler.GetEventLocationsHeaders(eventName)
+                .Select(x => Elements.CityBox(cities, x)).ToList();
+        }
+
+        private List<DateTimePicker> GetDateTimePickers(string eventName)
+        {
+            return App.EventHandler.GetEventDatesHeaders(eventName)
+                .Select(Elements.GeTimePicker).ToList();
         }
 
         protected sealed override TableLayoutPanel InitTable()
@@ -101,10 +91,11 @@ namespace TravelPlanner.UserInterface.EventForms
         {
             var controls = new List<Control>
             {
-                EventTypeBox, SubEventTypeBox, StartPicker, EndPicker, AmountPicker,
+                EventTypeBox, SubEventTypeBox, AmountPicker,
                 CurrencyBox
             };
             controls.InsertRange(2, LocationBoxes);
+            controls.InsertRange(2 + LocationBoxes.Count, DateTimePickers);
             return controls;
         }
 
@@ -140,7 +131,7 @@ namespace TravelPlanner.UserInterface.EventForms
             if (result)
             {
                 travelEvent = App.EventFabric.Get(EventTypeBox.Text,
-                    new[] {StartPicker.Value, EndPicker.Value},
+                    DateTimePickers.Select(x => x.Value).ToArray(),
                     LocationBoxes.Select(x => App.LocationHandler.GetLocationByName(x.Text)).ToArray(),
                     new Money((Currency) Enum.Parse(typeof(Currency), CurrencyBox.Text), AmountPicker.Value),
                     SubEventTypeBox.Text);

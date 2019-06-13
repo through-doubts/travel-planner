@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
+using TravelPlanner.Infrastructure.Extensions;
 
 namespace TravelPlanner.UserInterface.EventForms
 {
@@ -18,14 +20,10 @@ namespace TravelPlanner.UserInterface.EventForms
         {
             EventTypeBox.Text = travelEvent.Name;
             SubEventTypeBox.Text = travelEvent.Type;
-            StartPicker.Value = travelEvent.Dates[0];
-            EndPicker.Value = travelEvent.Dates[1];
+            DateTimePickers.InitializeProperty((x, p) => x.Value = p, travelEvent.Dates);
             CurrencyBox.Text = travelEvent.Cost.Currency.ToString();
             AmountPicker.Value = travelEvent.Cost.Amount;
-            for (var i = 0; i < travelEvent.Locations.Length; i++)
-            {
-                LocationBoxes[i].Text = travelEvent.Locations[i].Name;
-            }
+            LocationBoxes.InitializeProperty((x, p) => x.Text = p, travelEvent.Locations.Select(loc => loc.Name));
         }
 
         protected override EventHandler GetSaveButtonHandler()

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using MetroFramework.Controls;
+using TravelPlanner.Infrastructure;
 using TravelPlanner.Infrastructure.Extensions;
 
 namespace TravelPlanner.UserInterface
@@ -63,6 +64,23 @@ namespace TravelPlanner.UserInterface
             var button = GetButton(text, (sender, args) => form.Close());
             button.Dock = DockStyle.Fill;
             return button;
+        }
+
+        public static Button ArrowButton(Direction direction, EventHandler onClick)
+        {
+            switch (direction)
+            {
+                case Direction.Down:
+                    return GetButton(char.ConvertFromUtf32(0x2193), onClick);
+                case Direction.Up:
+                    return GetButton(char.ConvertFromUtf32(0x2191), onClick);
+                case Direction.Right:
+                    return GetButton(char.ConvertFromUtf32(0x2192), onClick);
+                case Direction.Left:
+                    return GetButton(char.ConvertFromUtf32(0x2190), onClick);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+            }
         }
     }
 }

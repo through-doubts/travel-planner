@@ -100,6 +100,7 @@
     <Compile Include="Domain\Travel.cs" />
     <Compile Include="Domain\TravelEvent.cs" />
     <Compile Include="Infrastructure\Currency.cs" />
+    <Compile Include="Infrastructure\Direction.cs" />
     <Compile Include="Infrastructure\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Infrastructure\Excel\ExcelReader.cs" />
     <Compile Include="Infrastructure\Extensions\TableLayoutPanelExtensions.cs" />
