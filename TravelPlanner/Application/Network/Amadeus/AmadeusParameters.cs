@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using TravelPlanner.Infrastructure.Network;
 
-namespace TravelPlanner.Infrastructure.Network.Amadeus
+namespace TravelPlanner.Application.Network.Amadeus
 {
     public class AmadeusParameters
     {

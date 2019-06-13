@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TravelPlanner.Infrastructure.Network
+namespace TravelPlanner.Application.Network
 {
     public class TransportParameters
     {
