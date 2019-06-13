@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using TravelPlanner.Infrastructure.Extensions;
@@ -34,7 +35,19 @@ namespace TravelPlanner.UserInterface
 
         private TableLayoutPanel InitOptionsTable()
         {
-            var optionsTable = InitButtonTable(getOptions().Select(GetOptionButton).ToList(), 100);
+            var optionsTable = InitButtonTable(getOptions()
+                .Select(GetOptionButton)
+                .Select(b =>
+                {
+                    b.MouseDown += Button_MouseDown;
+                    b.MouseMove += Button_MouseMove;
+                    b.MouseUp += Button_MouseUp;
+                    b.MouseClick += Button_MouseClick;
+                    return b;
+                })
+                .ToList(), 100);
+            optionsTable.DragOver += TableLayoutPanel_DragOver;
+            optionsTable.AllowDrop = true;
             optionsTable.AutoScroll = true;
             return optionsTable;
         }
@@ -47,6 +60,48 @@ namespace TravelPlanner.UserInterface
 
             table.Dock = DockStyle.Top;
             return table;
+        }
+
+        private void Button_MouseDown(object sender, MouseEventArgs e)
+        {
+            ((Button)sender).Tag = new object();
+        }
+
+        private void Button_MouseMove(object sender, MouseEventArgs e)
+        {
+            var button = (Button)sender;
+            if (button.Tag != null)
+                button.DoDragDrop(sender, DragDropEffects.Move);
+        }
+
+        private void Button_MouseUp(object sender, MouseEventArgs e)
+        {
+            ((Button)sender).Tag = null;
+        }
+
+        private void Button_MouseClick(object sender, MouseEventArgs e)
+        {
+            Text = ((Control)sender).Text;
+        }
+
+        private void TableLayoutPanel_DragOver(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(typeof(Button)))
+                return;
+            var tableLayoutPanel = (TableLayoutPanel) sender;
+
+            e.Effect = e.AllowedEffect;
+            var draggedButton = (Button)e.Data.GetData(typeof(Button));
+
+            var pt = tableLayoutPanel.PointToClient(new Point(e.X, e.Y));
+            var button = (Button)tableLayoutPanel.GetChildAtPoint(pt);
+
+            if (button != null)
+            {
+                var pos = tableLayoutPanel.GetPositionFromControl(button);
+                tableLayoutPanel.Controls.Add(draggedButton, pos.Column, pos.Row);
+                draggedButton.Tag = null;
+            }
         }
 
         protected abstract List<Button> GetButtons();

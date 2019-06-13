@@ -51,9 +51,11 @@ namespace TravelPlanner.UserInterface
             var contextMenu = new ContextMenuStrip();
             var fix = new ToolStripMenuItem("Зафиксировать");
             var delete = new ToolStripMenuItem("Удалить");
+            fix.Click += (sender, args) => { app.UserSessionHandler.FixateEventPrice(travelEvent); };
             delete.Click += (sender, args) =>
             {
                 app.UserSessionHandler.CurrentTravelEvents.Delete(travelEvent);
+                UpdateTable();
             };
             contextMenu.Items.AddRange(new ToolStripItem[] {fix, delete});
             return contextMenu;
