@@ -53,7 +53,7 @@ namespace TravelPlanner.Application.Serialization
                 var user = new User(id);
                 users.Add(user);
 
-                foreach (var travelToken in userToken["Travelers"])
+                foreach (var travelToken in userToken["Travels"])
                 {
                     var travelId = (int)travelToken["Id"];
                     var travelName = (string)travelToken["Name"];

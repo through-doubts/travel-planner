@@ -22,7 +22,7 @@ namespace TravelPlanner.Domain.TravelEvents
             {
                 $"{Type}. {string.Join(", ", FieldsInfo.LocationsHeaders.Zip(Locations, (h, l) => $"{h}: {l.Name}"))}",
                 string.Join(", ", FieldsInfo.DatesHeaders.Zip(Dates, (h, d) => $"{h}: {d}")),
-                $"Цена: {Cost.Amount} {Cost.Currency}"
+                $"Цена: {Cost.Amount} {Cost.Currency.Symbol}"
             };
             return string.Join("\n", lines);
         }

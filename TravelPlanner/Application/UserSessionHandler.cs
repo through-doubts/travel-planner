@@ -19,7 +19,13 @@ namespace TravelPlanner.Application
         public UserSessionHandler(ISerialization serialization)
         {
             users = serialization.LoadUsers();
-            currentUser = users.Any() ? users[0] : new User(1);
+            if (users.Any())
+                currentUser = users[0];
+            else
+            {
+                currentUser = new User(1);
+                users.Add(currentUser);
+            }
             this.serialization = serialization;
         }
 
