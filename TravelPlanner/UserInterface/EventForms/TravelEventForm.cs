@@ -54,7 +54,7 @@ namespace TravelPlanner.UserInterface.EventForms
                 UpdateTable();
             };
             DateTimePickers = GetDateTimePickers(EventTypeBox.Text);
-            CurrencyBox = Elements.TypeBox(Enum.GetNames(typeof(Currency)), "Валюта");
+            CurrencyBox = Elements.TypeBox(Currencies.GetCurrenciesNames(), "Валюта");
             AmountPicker = new NumericUpDown { DecimalPlaces = 2, Maximum = 100000, Name = "Стоимость" };
             LocationBoxes = GetLocationBoxes(EventTypeBox.Text);
         }
@@ -62,13 +62,13 @@ namespace TravelPlanner.UserInterface.EventForms
         private List<MetroTextBox> GetLocationBoxes(string eventName)
         {
             var cities = App.LocationHandler.GetLocationsNames().ToArray();
-            return App.EventHandler.GetEventLocationsHeaders(eventName)
+            return App.EventHandler.GetFieldsInfo(eventName).LocationsHeaders
                 .Select(x => Elements.CityBox(cities, x)).ToList();
         }
 
         private List<DateTimePicker> GetDateTimePickers(string eventName)
         {
-            return App.EventHandler.GetEventDatesHeaders(eventName)
+            return App.EventHandler.GetFieldsInfo(eventName).DatesHeaders
                 .Select(Elements.GeTimePicker).ToList();
         }
 
@@ -160,7 +160,7 @@ namespace TravelPlanner.UserInterface.EventForms
                 travelEvent = App.EventFabric.Get(EventTypeBox.Text,
                     DateTimePickers.Select(x => x.Value).ToArray(),
                     LocationBoxes.Select(x => App.LocationHandler.GetLocationByName(x.Text)).ToArray(),
-                    new Money((Currency) Enum.Parse(typeof(Currency), CurrencyBox.Text), AmountPicker.Value),
+                    new Money(Currencies.GetCurrency(CurrencyBox.Text), AmountPicker.Value),
                     SubEventTypeBox.Text);
             }
             else

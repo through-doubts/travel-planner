@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using RestSharp;
 using TravelPlanner.Domain;
+using TravelPlanner.Domain.TravelEvents;
 using TravelPlanner.Infrastructure;
 using TravelPlanner.Infrastructure.Network;
 using TravelPlanner.Properties;
@@ -85,8 +86,8 @@ namespace TravelPlanner.Application.Network.Skyscanner
 
         private Money GetMoney(Leg leg, Dictionary<string, decimal> prices, SkyscannerResponse response)
         {
-            return new Money((Infrastructure.Currency) Enum.Parse(typeof(Infrastructure.Currency),
-                    (string)response.Query["Currency"]), prices[leg.Id]);
+            return new Money(Currencies.GetCurrency((string)response.Query["Currency"]),
+                prices[leg.Id]);
         }
     }
 }

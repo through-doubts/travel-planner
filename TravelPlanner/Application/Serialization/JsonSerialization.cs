@@ -34,9 +34,16 @@ namespace TravelPlanner.Application.Serialization
         public List<User> LoadUsers()
         {
             string input;
-            using (var reader = new StreamReader(MainApplication.SerializationFile))
+            try
             {
-                input = reader.ReadToEnd();
+                using (var reader = new StreamReader(MainApplication.SerializationFile))
+                {
+                    input = reader.ReadToEnd();
+                }
+            }
+            catch (IOException)
+            {
+                return new List<User>();
             }
             var usersArray = JArray.Parse(input);
             var users = new List<User>();

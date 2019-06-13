@@ -4,6 +4,7 @@ using System.Linq;
 using TravelPlanner.Application.Network;
 using TravelPlanner.Application.Network.AirportsFinder;
 using TravelPlanner.Domain;
+using TravelPlanner.Domain.TravelEvents;
 using TravelPlanner.Infrastructure.Extensions;
 using TravelPlanner.Infrastructure.Network;
 

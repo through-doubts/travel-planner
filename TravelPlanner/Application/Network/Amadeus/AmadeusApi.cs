@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using RestSharp;
 using TravelPlanner.Domain;
+using TravelPlanner.Domain.TravelEvents;
 using TravelPlanner.Infrastructure.Network;
 
 namespace TravelPlanner.Application.Network.Amadeus

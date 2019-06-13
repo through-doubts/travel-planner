@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
@@ -21,6 +23,7 @@ namespace TravelPlanner.UserInterface
             this.getEnterForm = getEnterForm;
             Size = new Size(800, 600);
             Text = "Путешествия";
+            FormClosing += OnClose;
         }
 
         private Button GetAddButton()
@@ -60,6 +63,12 @@ namespace TravelPlanner.UserInterface
         {
             var contextMenu = new ContextMenuStrip();
             var delete = new ToolStripMenuItem("Удалить");
+            var export = new ToolStripMenuItem("Экспортировать");
+            export.DropDownItems.AddRange(app.FormatsHandler.GetFormatsNames()
+                .Select(x => new ToolStripMenuItem(x, null, (sender, args) =>
+                {
+                    var format = app.FormatsHandler.GetFormatByName(x);
+                })));
             delete.Click += (sender, args) =>
             {
                 app.UserSessionHandler.Travels.Delete(travel);
@@ -77,6 +86,11 @@ namespace TravelPlanner.UserInterface
         protected override Button GetOptionButton(Travel option)
         {
             return GetTravelButton(option);
+        }
+
+        private void OnClose(object sender, CancelEventArgs args)
+        {
+            app.UserSessionHandler.SaveUsers();
         }
     }
 }
