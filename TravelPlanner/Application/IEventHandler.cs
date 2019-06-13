@@ -12,5 +12,7 @@ namespace TravelPlanner.Application
         List<string> GetEventsNames();
         Type GetEventType(string eventName);
         string[] GetEventSubTypes(string eventName);
+        string[] GetEventLocationsHeaders(string eventName);
+        string[] GetEventDatesHeaders(string eventName);
     }
 }
