@@ -68,13 +68,19 @@ namespace TravelPlanner.UserInterface
                 .Select(x => new ToolStripMenuItem(x, null, (sender, args) =>
                 {
                     var format = app.FormatsHandler.GetFormatByName(x);
-                })));
+                    var dialog = new SaveFileDialog {Filter = $"{x} files (*.{x})|*.{x}|All files (*.*)|*.*"};
+                    if (dialog.ShowDialog(this) == DialogResult.OK)
+                    {
+                        format.SaveTravel(dialog.FileName, travel);
+                    }
+                })).ToArray());
             delete.Click += (sender, args) =>
             {
                 app.UserSessionHandler.Travels.Delete(travel);
                 UpdateTable();
             };
             contextMenu.Items.Add(delete);
+            contextMenu.Items.Add(export);
             return contextMenu;
         }
 
