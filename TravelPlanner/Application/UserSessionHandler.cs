@@ -11,55 +11,28 @@ namespace TravelPlanner.Application
     {
         private readonly User user;
         private Travel currentTravel;
-        private int currentTravelId;
+
+        public ListHandler<Travel> Travels => new ListHandler<Travel>(user.Travels);
+        public ListHandler<ITravelEvent> CurrentTravelEvents => new ListHandler<ITravelEvent>(currentTravel.Events);
 
         public UserSessionHandler(User user)
         {
             this.user = user;
         }
 
-        public void AddTravel(string travelName)
+        public void ChangeCurrentTravel(Travel travel)
         {
-            var travel = new Travel(currentTravelId, travelName);
-            currentTravelId++;
-            currentTravel = travel;
-            user.AddTravel(travel);
-        }
-
-        public void DeleteTravel(string travelName)
-        {
-            user.DeleteTravel(travelName);
-        }
-
-        public void ChangeCurrentTravel(string travelName)
-        {
-            var travel = user.GetTravel(travelName);
             currentTravel = travel;
         }
 
-        public List<string> GetTravelsNames()
+        public void FixateEventPrice(ITravelEvent travelEvent)
         {
-            return user.GetTravelsNames();
+            currentTravel.FixateEventPrice(travelEvent);
         }
 
-        public void AddEvent(ITravelEvent travelEvent)
+        public bool EventPriceIsFixated(ITravelEvent travelEvent)
         {
-            currentTravel.AddEvent(travelEvent);
-        }
-
-        public void DeleteEvent(ITravelEvent travelEvent)
-        {
-            currentTravel.DeleteEvent(travelEvent);
-        }
-
-        public void ReplaceEvent(ITravelEvent oldTravelEvent, ITravelEvent newTravelEvent)
-        {
-            currentTravel.ReplaceEvent(oldTravelEvent, newTravelEvent);
-        }
-
-        public List<ITravelEvent> GetTravelEvents()
-        {
-            return currentTravel?.GetTravelEvents();
+            return currentTravel.EventPriceIsFixated(travelEvent);
         }
     }
 }

@@ -75,26 +75,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\EventFabric.cs" />
     <Compile Include="Application\IApplication.cs" />
     <Compile Include="Application\IDataProvider.cs" />
     <Compile Include="Application\IEventHandler.cs" />
+    <Compile Include="Application\IFabric.cs" />
+    <Compile Include="Application\ILocationHandler.cs" />
     <Compile Include="Application\IUserSessionHandler.cs" />
+    <Compile Include="Application\ListHandler.cs" />
+    <Compile Include="Application\LocationHandler.cs" />
     <Compile Include="Application\MainApplication.cs" />
     <Compile Include="Application\Tests\MainApplication_should.cs" />
     <Compile Include="Application\Tests\TravelEventHandler_should.cs" />
     <Compile Include="Application\TravelEventHandler.cs" />
+    <Compile Include="Application\TravelFabric.cs" />
     <Compile Include="Application\User.cs" />
     <Compile Include="Application\UserSessionHandler.cs" />
-    <Compile Include="Domain\Checkpoints.cs" />
     <Compile Include="Domain\Housing.cs" />
+    <Compile Include="Domain\INameable.cs" />
     <Compile Include="Domain\ITravelEvent.cs" />
     <Compile Include="Domain\Location.cs" />
     <Compile Include="Domain\Route.cs" />
     <Compile Include="Domain\Transfer.cs" />
     <Compile Include="Domain\Travel.cs" />
+    <Compile Include="Domain\TravelEvent.cs" />
     <Compile Include="Infrastructure\Currency.cs" />
     <Compile Include="Infrastructure\Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Infrastructure\ExcelReader.cs" />
+    <Compile Include="Infrastructure\Excel\ExcelReader.cs" />
     <Compile Include="Infrastructure\Extensions\TableLayoutPanelExtensions.cs" />
     <Compile Include="Infrastructure\Network\AirportsFinder\AirportsFinder.cs" />
     <Compile Include="Infrastructure\Network\Currency\CurrencyApi.cs" />
@@ -115,9 +122,13 @@
     <Compile Include="Infrastructure\Network\Skyscanner\SkyscannerApi.cs" />
     <Compile Include="Infrastructure\Network\Skyscanner\SkyscannerApiParameters.cs" />
     <Compile Include="Infrastructure\ValueType.cs" />
-    <Compile Include="UserInterface\AddForm.cs">
+    <Compile Include="UserInterface\EventForms\AddEventForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\EventForms\EditEventForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\EventForms\TravelEventFormFactory.cs" />
     <Compile Include="UserInterface\ApplicationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,7 +141,13 @@
     <Compile Include="UserInterface\EnterForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserInterface\FormWithTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UserInterface\PathForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\EventForms\TravelEventForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">

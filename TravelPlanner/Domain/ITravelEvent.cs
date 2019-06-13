@@ -7,17 +7,17 @@ using TravelPlanner.Infrastructure;
 
 namespace TravelPlanner.Domain
 {
-    public interface ITravelEvent
+    public interface ITravelEvent : INameable
     {
-        DateTimeInterval DateTimeInterval { get; }
+        string[] PossibleTypes { get; }
+        string[] LocationsHeaders { get; }
+        string[] DatesHeaders { get; }
+
+        DateTime[] Dates { get; }
         Money Cost { get; }
-        string Name { get; }
-        Type SubTypesType { get; }
-        Checkpoints Checkpoints { get; }
-        CheckpointType CheckpointType { get; }
+        Location[] Locations { get; }
+        string Type { get; }
+
         string ToStringValue();
-        
-
-
     }
 }

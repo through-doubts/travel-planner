@@ -8,39 +8,20 @@ using TravelPlanner.Infrastructure;
 
 namespace TravelPlanner.Domain
 {
-    public class Transfer : ValueType<Transfer>, ITravelEvent
+    public class Transfer : TravelEvent
     {
-        public DateTimeInterval DateTimeInterval { get; }
-        public Money Cost { get; }
-        public TransferType Type { get; }
-        public string Name => "Перемещение";
-        public Type SubTypesType => typeof(TransferType);
-        public Checkpoints Checkpoints { get; }
-        public CheckpointType CheckpointType => CheckpointType.Transfer;
+        private const string name = "Перемещение";
+        private static readonly string[] possibleTypes = { "Поезд", "Самолет", "Автобус", "Машина" };
+        private static readonly string[] locationsHeaders = { "Место отправления", "Место прибытия" };
+        private static readonly string[] datesHeaders = { "Время отправления", "Время прибытия" };
 
-        public string ToStringValue()
-        {
-            return $"{Name} {Checkpoints.From}--{Checkpoints.To}";
-        }
-
-        public Transfer()
+        public Transfer() : base(name, possibleTypes, locationsHeaders, datesHeaders)
         {
         }
 
-        public Transfer(DateTimeInterval dateTimeInterval, Checkpoints checkpoints, Money cost, TransferType type)
+        public Transfer(DateTime[] dates, Location[] locations, Money cost, string type) :
+            base(dates, locations, cost, type, name, possibleTypes, locationsHeaders, datesHeaders)
         {
-            DateTimeInterval = dateTimeInterval;
-            Checkpoints = checkpoints;
-            Cost = cost;
-            Type = type;
         }
-    }
-
-    public enum TransferType
-    {
-        Train,
-        Plane,
-        Bus,
-        Car
     }
 }

@@ -7,37 +7,27 @@ using TravelPlanner.Infrastructure;
 
 namespace TravelPlanner.Domain
 {
-    public class Travel : Entity<int>
+    public class Travel : Entity<int>, INameable
     {
-        private readonly List<ITravelEvent> events;
+        public List<ITravelEvent> Events { get; }
         public string Name { get; }
+        private readonly List<ITravelEvent> TravelEventsWithFixatedPrice;
 
         public Travel(int id, string name) : base(id)
         {
-            events = new List<ITravelEvent>();
+            Events = new List<ITravelEvent>();
+            TravelEventsWithFixatedPrice = new List<ITravelEvent>();
             Name = name;
         }
 
-        public void AddEvent(ITravelEvent travelEvent)
+        public void FixateEventPrice(ITravelEvent travelEvent)
         {
-            events.Add(travelEvent);
+            TravelEventsWithFixatedPrice.Add(travelEvent);
         }
 
-        public void DeleteEvent(ITravelEvent travelEvent)
+        public bool EventPriceIsFixated(ITravelEvent travelEvent)
         {
-            events.Remove(travelEvent);
-        }
-
-        public void ReplaceEvent(ITravelEvent oldTravelEvent, ITravelEvent newTravelEvent)
-        {
-            var index = events.IndexOf(oldTravelEvent);
-            events.RemoveAt(index);
-            events.Insert(index, newTravelEvent);
-        }
-
-        public List<ITravelEvent> GetTravelEvents()
-        {
-            return new List<ITravelEvent>(events);
+            return TravelEventsWithFixatedPrice.Contains(travelEvent);
         }
     }
 }

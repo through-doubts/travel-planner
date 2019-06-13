@@ -11,15 +11,8 @@ namespace TravelPlanner.Application
     {
         List<string> GetEventsNames();
         Type GetEventType(string eventName);
-        Type GetEventSubType(string eventName);
-        ITravelEvent GetEvent(string name, params object[] parameters);
-        ITravelEvent GetEvent(
-            string name, 
-            DateTime startDate, DateTime endDate,
-            Location[] locations,
-            decimal amountOfMoney, string currency,
-            string eventSubType);
-
-
+        string[] GetEventSubTypes(string eventName);
+        string[] GetEventLocationsHeaders(string eventName);
+        string[] GetEventDatesHeaders(string eventName);
     }
 }

@@ -13,11 +13,18 @@ namespace TravelPlanner.Application
     {
         public IEventHandler EventHandler { get; }   
         public IUserSessionHandler UserSessionHandler { get; }
+        public IFabric<ITravelEvent> EventFabric { get; }
+        public IFabric<Travel> TravelFabric { get; }
+        public ILocationHandler LocationHandler { get; }
 
-        public MainApplication(IEventHandler eventHandler, IUserSessionHandler userSessionHandler)
+        public MainApplication(IEventHandler eventHandler, IUserSessionHandler userSessionHandler, IFabric<ITravelEvent> eventFabric,
+            IFabric<Travel> travelFabric, ILocationHandler locationHandler)
         {
             EventHandler = eventHandler;
             UserSessionHandler = userSessionHandler;
+            EventFabric = eventFabric;
+            TravelFabric = travelFabric;
+            LocationHandler = locationHandler;
         }
 
     }
