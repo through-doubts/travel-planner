@@ -7,6 +7,7 @@ using MetroFramework;
 using MetroFramework.Controls;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
+using TravelPlanner.Domain.TravelEvents;
 using TravelPlanner.Infrastructure;
 using TravelPlanner.Infrastructure.Extensions;
 
@@ -46,11 +47,11 @@ namespace TravelPlanner.UserInterface.EventForms
             EndPicker = Elements.GeTimePicker("Дата2");
             EventTypeBox = Elements.TypeBox(App.EventHandler.GetEventsNames(), "Тип события");
             SubEventTypeBox = Elements.TypeBox(
-                App.EventHandler.GetEventSubTypes(App.EventHandler.GetEventsNames()[0]),
+                App.EventHandler.GetFieldsInfo(App.EventHandler.GetEventsNames()[0]).PossibleTypes,
                 "Подтип события");
             EventTypeBox.SelectedIndexChanged += (sender, args) =>
             {
-                SubEventTypeBox.DataSource = App.EventHandler.GetEventSubTypes(EventTypeBox.Text);
+                SubEventTypeBox.DataSource = App.EventHandler.GetFieldsInfo(EventTypeBox.Text).PossibleTypes;
                 LocationBoxes = GetLocationBoxes(EventTypeBox.Text);
                 UpdateTable();
             };

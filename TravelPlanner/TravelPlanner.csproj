@@ -47,6 +47,9 @@
     <Reference Include="FileHelpers, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
       <HintPath>packages\FileHelpers.3.4.0\lib\net45\FileHelpers.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlTags, Version=7.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\HtmlTags.7.0.3\lib\net45\HtmlTags.dll</HintPath>
+    </Reference>
     <Reference Include="MetroFramework, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
       <HintPath>packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.dll</HintPath>
     </Reference>
@@ -55,6 +58,9 @@
     </Reference>
     <Reference Include="MetroFramework.Fonts, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
       <HintPath>packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Fonts.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
@@ -72,6 +78,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Device" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Encodings.Web.4.0.0\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -87,35 +96,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\EventFabric.cs" />
+    <Compile Include="Application\Fabrics\EventFabric.cs" />
     <Compile Include="Application\Formats\CSVFormat.cs" />
     <Compile Include="Application\Formats\FormatsHandler.cs" />
+    <Compile Include="Application\Formats\HtmlFormat.cs" />
     <Compile Include="Application\Formats\IFormat.cs" />
     <Compile Include="Application\Formats\IFormatsHandler.cs" />
-    <Compile Include="Application\Formats\Tests\Test_CSVFormat.cs" />
     <Compile Include="Application\IApplication.cs" />
-    <Compile Include="Application\IDataProvider.cs" />
-    <Compile Include="Application\IEventHandler.cs" />
-    <Compile Include="Application\IFabric.cs" />
+    <Compile Include="Application\Serialization\ISerialization.cs" />
+    <Compile Include="Application\MetaInfoHandlers\IEventHandler.cs" />
+    <Compile Include="Application\Fabrics\IFabric.cs" />
     <Compile Include="Application\ILocationHandler.cs" />
     <Compile Include="Application\IUserSessionHandler.cs" />
-    <Compile Include="Application\ListHandler.cs" />
+    <Compile Include="Application\Serialization\JsonSerialization.cs" />
+    <Compile Include="Infrastructure\ListHandler.cs" />
     <Compile Include="Application\LocationHandler.cs" />
     <Compile Include="Application\MainApplication.cs" />
     <Compile Include="Application\Tests\MainApplication_should.cs" />
     <Compile Include="Application\Tests\TravelEventHandler_should.cs" />
-    <Compile Include="Application\TravelEventHandler.cs" />
-    <Compile Include="Application\TravelFabric.cs" />
+    <Compile Include="Application\MetaInfoHandlers\TravelEventHandler.cs" />
+    <Compile Include="Application\Fabrics\TravelFabric.cs" />
     <Compile Include="Application\User.cs" />
     <Compile Include="Application\UserSessionHandler.cs" />
-    <Compile Include="Domain\Housing.cs" />
-    <Compile Include="Domain\INameable.cs" />
-    <Compile Include="Domain\ITravelEvent.cs" />
+    <Compile Include="Domain\TravelEvents\FieldsInfo.cs" />
+    <Compile Include="Domain\TravelEvents\Housing.cs" />
+    <Compile Include="Infrastructure\INameable.cs" />
+    <Compile Include="Domain\TravelEvents\ITravelEvent.cs" />
     <Compile Include="Domain\Location.cs" />
-    <Compile Include="Domain\Route.cs" />
-    <Compile Include="Domain\Transfer.cs" />
+    <Compile Include="Domain\TravelEvents\Transfer.cs" />
     <Compile Include="Domain\Travel.cs" />
-    <Compile Include="Domain\TravelEvent.cs" />
+    <Compile Include="Domain\TravelEvents\TravelEvent.cs" />
     <Compile Include="Infrastructure\Currency.cs" />
     <Compile Include="Infrastructure\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Infrastructure\Excel\ExcelReader.cs" />

@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TravelPlanner.Application.Fabrics;
 using TravelPlanner.Application.Formats;
+using TravelPlanner.Application.MetaInfoHandlers;
 using TravelPlanner.Domain;
-using TravelPlanner.Infrastructure;
+using TravelPlanner.Domain.TravelEvents;
 
 namespace TravelPlanner.Application
 {
     public class MainApplication : IApplication
     {
+        public static string SerializationFile = "users.json";
+
         public IEventHandler EventHandler { get; }   
         public IUserSessionHandler UserSessionHandler { get; }
         public IFabric<ITravelEvent> EventFabric { get; }

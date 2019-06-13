@@ -16,5 +16,10 @@ namespace TravelPlanner.Infrastructure
             Currency = currency;
             Amount = amount;
         }
+
+        public string ToStringValue()
+        {
+            return $"{Amount} {Currency.Symbol}";
+        }
     }
 }

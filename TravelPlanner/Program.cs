@@ -11,7 +11,11 @@ using TravelPlanner.Infrastructure;
 using TravelPlanner.UserInterface;
 using TravelPlanner.Properties;
 using Ninject;
+using TravelPlanner.Application.Fabrics;
 using TravelPlanner.Application.Formats;
+using TravelPlanner.Application.MetaInfoHandlers;
+using TravelPlanner.Application.Serialization;
+using TravelPlanner.Domain.TravelEvents;
 using TravelPlanner.UserInterface.EventForms;
 
 namespace TravelPlanner
@@ -38,15 +42,16 @@ namespace TravelPlanner
             var container = new StandardKernel();
             
             container.Bind<IUserSessionHandler>().To<UserSessionHandler>();
-            container.Bind<User>().ToConstant(new User(1));
 
             container.Bind<IFabric<ITravelEvent>>().To<EventFabric>();
             container.Bind<IFabric<Travel>>().To<TravelFabric>();
 
             container.Bind<ILocationHandler>().To<LocationHandler>();
+            container.Bind<ISerialization>().To<JsonSerialization>();
 
             container.Bind<IFormatsHandler>().To<FormatsHandler>();
             container.Bind<IFormat>().To<CSVFormat>();
+            container.Bind<IFormat>().To<HtmlFormat>();
 
             container.Bind<IEventHandler>().To<TravelEventHandler>();
             container.Bind<ITravelEvent>().To<Housing>();

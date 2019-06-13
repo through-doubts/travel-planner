@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
+using TravelPlanner.Domain.TravelEvents;
 using TravelPlanner.UserInterface.EventForms;
 
 namespace TravelPlanner.UserInterface
