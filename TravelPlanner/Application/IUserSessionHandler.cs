@@ -13,5 +13,7 @@ namespace TravelPlanner.Application
         ListHandler<ITravelEvent> CurrentTravelEvents { get; }
 
         void ChangeCurrentTravel(Travel travel);
+        void FixateEventPrice(ITravelEvent travelEvent);
+        bool EventPriceIsFixated(ITravelEvent travelEvent);
     }
 }

@@ -10,6 +10,8 @@ namespace TravelPlanner.Domain
     public interface ITravelEvent : INameable
     {
         string[] PossibleTypes { get; }
+        string[] LocationsHeaders { get; }
+        string[] DatesHeaders { get; }
 
         DateTime[] Dates { get; }
         Money Cost { get; }

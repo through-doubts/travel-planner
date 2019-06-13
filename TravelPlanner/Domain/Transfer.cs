@@ -12,18 +12,15 @@ namespace TravelPlanner.Domain
     {
         private const string name = "Перемещение";
         private static readonly string[] possibleTypes = { "Поезд", "Самолет", "Автобус", "Машина" };
+        private static readonly string[] locationsHeaders = { "Место отправления", "Место прибытия" };
+        private static readonly string[] datesHeaders = { "Время отправления", "Время прибытия" };
 
-        public override string ToStringValue()
-        {
-            return $"{Name} {Locations[0]}--{Locations[1]}";
-        }
-
-        public Transfer() : base(name, possibleTypes)
+        public Transfer() : base(name, possibleTypes, locationsHeaders, datesHeaders)
         {
         }
 
         public Transfer(DateTime[] dates, Location[] locations, Money cost, string type) :
-            base(dates, locations, cost, type, name, possibleTypes)
+            base(dates, locations, cost, type, name, possibleTypes, locationsHeaders, datesHeaders)
         {
         }
     }
