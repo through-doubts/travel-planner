@@ -1,23 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TravelPlanner.Application.Serialization;
 using TravelPlanner.Domain;
+using TravelPlanner.Domain.TravelEvents;
 
 namespace TravelPlanner.Application
 {
     public class UserSessionHandler : IUserSessionHandler
     {
-        private readonly User user;
+        private readonly List<User> users;
+        private readonly User currentUser;
         private Travel currentTravel;
+        private readonly ISerialization serialization;
 
-        public ListHandler<Travel> Travels => new ListHandler<Travel>(user.Travels);
+        public ListHandler<Travel> Travels => new ListHandler<Travel>(currentUser.Travels);
         public ListHandler<ITravelEvent> CurrentTravelEvents => new ListHandler<ITravelEvent>(currentTravel.Events);
 
-        public UserSessionHandler(User user)
+        public UserSessionHandler(ISerialization serialization)
         {
-            this.user = user;
+            users = serialization.LoadUsers();
+            currentUser = users.Any() ? users[0] : new User(1);
+            this.serialization = serialization;
         }
 
         public void ChangeCurrentTravel(Travel travel)
@@ -33,6 +36,11 @@ namespace TravelPlanner.Application
         public bool EventPriceIsFixated(ITravelEvent travelEvent)
         {
             return currentTravel.EventPriceIsFixated(travelEvent);
+        }
+
+        public void SaveUsers()
+        {
+            serialization.SaveUsers(users);
         }
     }
 }

@@ -2,7 +2,11 @@
 using System.Linq;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
+
+using TravelPlanner.Domain.TravelEvents;
+
 using TravelPlanner.Infrastructure.Extensions;
+
 
 namespace TravelPlanner.UserInterface.EventForms
 {

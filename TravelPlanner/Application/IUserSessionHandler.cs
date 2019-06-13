@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TravelPlanner.Domain;
+﻿using TravelPlanner.Domain;
+using TravelPlanner.Domain.TravelEvents;
 
 namespace TravelPlanner.Application
 {
@@ -15,5 +11,7 @@ namespace TravelPlanner.Application
         void ChangeCurrentTravel(Travel travel);
         void FixateEventPrice(ITravelEvent travelEvent);
         bool EventPriceIsFixated(ITravelEvent travelEvent);
+
+        void SaveUsers();
     }
 }

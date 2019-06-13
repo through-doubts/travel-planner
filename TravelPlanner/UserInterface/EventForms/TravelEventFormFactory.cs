@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TravelPlanner.Application;
 using TravelPlanner.Domain;
+using TravelPlanner.Domain.TravelEvents;
 
 namespace TravelPlanner.UserInterface.EventForms
 {

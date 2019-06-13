@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -10,11 +11,18 @@ using TravelPlanner.Infrastructure;
 using TravelPlanner.UserInterface;
 using TravelPlanner.Properties;
 using Ninject;
+using TravelPlanner.Application.Fabrics;
+using TravelPlanner.Application.Formats;
+using TravelPlanner.Application.MetaInfoHandlers;
+using TravelPlanner.Application.Serialization;
+using TravelPlanner.Domain.TravelEvents;
+
 using TravelPlanner.Application.Network;
 using TravelPlanner.Application.Network.AirportsFinder;
 using TravelPlanner.Application.Network.Amadeus;
 using TravelPlanner.Application.Network.Skyscanner;
 using TravelPlanner.Infrastructure.Network;
+
 using TravelPlanner.UserInterface.EventForms;
 
 namespace TravelPlanner
@@ -39,18 +47,29 @@ namespace TravelPlanner
         static IApplication GetApplication()
         {
             var container = new StandardKernel();
+
             container.Bind<IEventHandler>().To<TravelEventHandler>();
             container.Bind<IUserSessionHandler>().To<UserSessionHandler>().InSingletonScope();
+
             container.Bind<IFabric<ITravelEvent>>().To<EventFabric>();
             container.Bind<IFabric<Travel>>().To<TravelFabric>();
+
             container.Bind<ILocationHandler>().To<LocationHandler>();
+            container.Bind<ISerialization>().To<JsonSerialization>();
+
+            container.Bind<IFormatsHandler>().To<FormatsHandler>();
+            container.Bind<IFormat>().To<CSVFormat>();
+            container.Bind<IFormat>().To<HtmlFormat>();            
+
             container.Bind<INetworkDataHandler>().To<NetworkDataHandler>();
             container.Bind<ITransportDataProvider>().To<SkyscannerApi>();
             container.Bind<IHousingDataProvider>().To<AmadeusApi>();
             container.Bind<IAirportCodeFinder>().To<AirportCodeFinder>();
-            container.Bind<User>().ToConstant(new User(1));
+
+
             container.Bind<ITravelEvent>().To<Housing>();
             container.Bind<ITravelEvent>().To<Transfer>();
+
             return container.Get<MainApplication>();
         }
     }

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\NUnit.3.12.0\build\NUnit.props" Condition="Exists('packages\NUnit.3.12.0\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,6 +12,10 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -50,11 +55,20 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <HintPath>packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
     </Reference>
     <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <HintPath>packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
+    <Reference Include="FileHelpers, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
+      <HintPath>packages\FileHelpers.3.4.0\lib\net45\FileHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlTags, Version=7.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\HtmlTags.7.0.3\lib\net45\HtmlTags.dll</HintPath>
     </Reference>
     <Reference Include="MetroFramework, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
       <HintPath>packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.dll</HintPath>
@@ -65,11 +79,14 @@
     <Reference Include="MetroFramework.Fonts, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
       <HintPath>packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Fonts.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>.\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="nunitlite">
       <HintPath>.\nunitlite.dll</HintPath>
@@ -81,6 +98,12 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Device" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Text.Encodings.Web.4.0.0\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -93,14 +116,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\EventFabric.cs" />
+    <Compile Include="Application\Fabrics\EventFabric.cs" />
+    <Compile Include="Application\Formats\CSVFormat.cs" />
+    <Compile Include="Application\Formats\FormatsHandler.cs" />
+    <Compile Include="Application\Formats\HtmlFormat.cs" />
+    <Compile Include="Application\Formats\IFormat.cs" />
+    <Compile Include="Application\Formats\IFormatsHandler.cs" />
     <Compile Include="Application\IApplication.cs" />
-    <Compile Include="Application\IDataProvider.cs" />
-    <Compile Include="Application\IEventHandler.cs" />
-    <Compile Include="Application\IFabric.cs" />
+    <Compile Include="Application\Serialization\ISerialization.cs" />
+    <Compile Include="Application\MetaInfoHandlers\IEventHandler.cs" />
+    <Compile Include="Application\Fabrics\IFabric.cs" />
     <Compile Include="Application\ILocationHandler.cs" />
     <Compile Include="Application\IUserSessionHandler.cs" />
-    <Compile Include="Application\ListHandler.cs" />
+    <Compile Include="Application\Serialization\JsonSerialization.cs" />
+    <Compile Include="Infrastructure\ListHandler.cs" />
     <Compile Include="Application\LocationHandler.cs" />
     <Compile Include="Application\MainApplication.cs" />
     <Compile Include="Application\NetworkDataHandler.cs" />
@@ -110,18 +139,18 @@
     <Compile Include="Application\Network\Skyscanner\SkyscannerResponse.cs" />
     <Compile Include="Application\Tests\MainApplication_should.cs" />
     <Compile Include="Application\Tests\TravelEventHandler_should.cs" />
-    <Compile Include="Application\TravelEventHandler.cs" />
-    <Compile Include="Application\TravelFabric.cs" />
+    <Compile Include="Application\MetaInfoHandlers\TravelEventHandler.cs" />
+    <Compile Include="Application\Fabrics\TravelFabric.cs" />
     <Compile Include="Application\User.cs" />
     <Compile Include="Application\UserSessionHandler.cs" />
-    <Compile Include="Domain\Housing.cs" />
-    <Compile Include="Domain\INameable.cs" />
-    <Compile Include="Domain\ITravelEvent.cs" />
+    <Compile Include="Domain\TravelEvents\FieldsInfo.cs" />
+    <Compile Include="Domain\TravelEvents\Housing.cs" />
+    <Compile Include="Infrastructure\INameable.cs" />
+    <Compile Include="Domain\TravelEvents\ITravelEvent.cs" />
     <Compile Include="Domain\Location.cs" />
-    <Compile Include="Domain\Route.cs" />
-    <Compile Include="Domain\Transfer.cs" />
+    <Compile Include="Domain\TravelEvents\Transfer.cs" />
     <Compile Include="Domain\Travel.cs" />
-    <Compile Include="Domain\TravelEvent.cs" />
+    <Compile Include="Domain\TravelEvents\TravelEvent.cs" />
     <Compile Include="Infrastructure\Currency.cs" />
     <Compile Include="Infrastructure\Direction.cs" />
     <Compile Include="Infrastructure\Extensions\EnumerableExtensions.cs" />
@@ -221,4 +250,10 @@
     <None Include="rapidapi-key.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\NUnit.3.12.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\NUnit.3.12.0\build\NUnit.props'))" />
+  </Target>
 </Project>
