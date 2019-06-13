@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RestSharp;
 using TravelPlanner.Infrastructure.Network;
+using TravelPlanner.Properties;
 
 namespace TravelPlanner.Application.Network.AirportsFinder
 {
@@ -11,7 +12,8 @@ namespace TravelPlanner.Application.Network.AirportsFinder
         private const string Url = "https://cometari-airportsfinder-v1.p.rapidapi.com";
         private const string Resource = "api/airports/by-text";
         private const string RapidApiHost = "cometari-airportsfinder-v1.p.rapidapi.com";
-        private static readonly string RapidApiKey = "5e1b6e0ce2mshf8d7bf48452442dp1fda98jsn9ef336f6b389";
+
+        private static readonly string RapidApiKey = Resources.rapidapi_key;
 
         public AirportCodeFinder(HttpApi httpApi) : base(httpApi) { }
 

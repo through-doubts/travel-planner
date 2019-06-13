@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using RestSharp;
 using TravelPlanner.Domain;
 using TravelPlanner.Infrastructure;
 using TravelPlanner.Infrastructure.Network;
+using TravelPlanner.Properties;
 
 namespace TravelPlanner.Application.Network.Skyscanner
 {
     public class SkyscannerApi : HttpDataProvider, ITransportDataProvider
     {
         private const string RapidApiHost = "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com";
-        private static readonly string RapidApiKey = "5e1b6e0ce2mshf8d7bf48452442dp1fda98jsn9ef336f6b389";
+
+        private static readonly string RapidApiKey = Resources.rapidapi_key;
         private const string PostResource = "apiservices/pricing/v1.0";
         private const string GetResource = "apiservices/pricing/uk2/v1.0/";
         private const string Url = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com";
