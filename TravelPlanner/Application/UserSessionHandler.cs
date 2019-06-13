@@ -24,6 +24,16 @@ namespace TravelPlanner.Application
         {
             currentTravel = travel;
         }
+
+        public void FixateEventPrice(ITravelEvent travelEvent)
+        {
+            currentTravel.FixateEventPrice(travelEvent);
+        }
+
+        public bool EventPriceIsFixated(ITravelEvent travelEvent)
+        {
+            return currentTravel.EventPriceIsFixated(travelEvent);
+        }
     }
 }
 
