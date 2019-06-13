@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -10,6 +11,7 @@ using TravelPlanner.Infrastructure;
 using TravelPlanner.UserInterface;
 using TravelPlanner.Properties;
 using Ninject;
+using TravelPlanner.Application.Formats;
 using TravelPlanner.UserInterface.EventForms;
 
 namespace TravelPlanner
@@ -34,14 +36,22 @@ namespace TravelPlanner
         static IApplication GetApplication()
         {
             var container = new StandardKernel();
-            container.Bind<IEventHandler>().To<TravelEventHandler>();
+            
             container.Bind<IUserSessionHandler>().To<UserSessionHandler>();
+            container.Bind<User>().ToConstant(new User(1));
+
             container.Bind<IFabric<ITravelEvent>>().To<EventFabric>();
             container.Bind<IFabric<Travel>>().To<TravelFabric>();
+
             container.Bind<ILocationHandler>().To<LocationHandler>();
-            container.Bind<User>().ToConstant(new User(1));
+
+            container.Bind<IFormatsHandler>().To<FormatsHandler>();
+            container.Bind<IFormat>().To<CSVFormat>();
+
+            container.Bind<IEventHandler>().To<TravelEventHandler>();
             container.Bind<ITravelEvent>().To<Housing>();
             container.Bind<ITravelEvent>().To<Transfer>();
+
             return container.Get<MainApplication>();
         }
     }
