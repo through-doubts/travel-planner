@@ -16,7 +16,7 @@ namespace TravelPlanner.UserInterface
         private readonly Func<string, EnterForm> getEnterForm;
 
         public ApplicationForm(IApplication app, Func<PathForm> getPathForm, Func<string, EnterForm> getEnterForm) : 
-            base(app.UserSessionHandler.Travels.GetItems)
+            base(app.UserSessionHandler.Travels.GetItems, (() => app))
         {
             this.app = app;
             this.getPathForm = getPathForm;
@@ -44,7 +44,7 @@ namespace TravelPlanner.UserInterface
             return addButton;
         }
 
-        public Button GetTravelButton(Travel travel)
+        public Button GetTravelButton(Travel travel, Func<IApplication> getApp)
         {
             var travelButton = Elements.GetButton(travel.Name, (sender, args) =>
             {
@@ -55,16 +55,17 @@ namespace TravelPlanner.UserInterface
                 UpdateTable();
                 Show();
             });
-            travelButton.ContextMenuStrip = GetTravelButtonStrip(travel);
+            travelButton.ContextMenuStrip = GetTravelButtonStrip(travel, getApp);
             return travelButton;
         }
 
-        private ContextMenuStrip GetTravelButtonStrip(Travel travel)
+        private ContextMenuStrip GetTravelButtonStrip(Travel travel, Func<IApplication> getApp)
         {
             var contextMenu = new ContextMenuStrip();
             var delete = new ToolStripMenuItem("Удалить");
             var export = new ToolStripMenuItem("Экспортировать");
-            export.DropDownItems.AddRange(app.FormatsHandler.GetFormatsNames()
+            var currentApp = getApp();
+            export.DropDownItems.AddRange(currentApp.FormatsHandler.GetFormatsNames()
                 .Select(x => new ToolStripMenuItem(x, null, (sender, args) =>
                 {
                     var format = app.FormatsHandler.GetFormatByName(x);
@@ -89,9 +90,9 @@ namespace TravelPlanner.UserInterface
             return new List<Button> {GetAddButton()};
         }
 
-        protected override Button GetOptionButton(Travel option)
+        protected override Button GetOptionButton(Travel option, Func<IApplication> getApp = null)
         {
-            return GetTravelButton(option);
+            return GetTravelButton(option, getApp);
         }
 
         private void OnClose(object sender, CancelEventArgs args)

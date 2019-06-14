@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using TravelPlanner.Application;
 using TravelPlanner.Infrastructure;
 using TravelPlanner.Infrastructure.Extensions;
 
 namespace TravelPlanner.UserInterface
 {
-    public abstract class ChooseOptionForm<TOption> : FormWithTable
+    abstract class ChooseOptionForm<TOption> : FormWithTable
     {
         private readonly Func<List<TOption>> getOptions;
+        private readonly Func<IApplication> getApp;
 
-        protected ChooseOptionForm(Func<List<TOption>> getOptions)
+        protected ChooseOptionForm(Func<List<TOption>> getOptions, Func<IApplication> getApp)
         {
             this.getOptions = getOptions;
+            this.getApp = getApp;
             Controls.Add(InitTable());
         }
 
@@ -37,7 +40,7 @@ namespace TravelPlanner.UserInterface
         {
             const int rowSpan = 2;
             var optionsTable = InitButtonTable(getOptions()
-                .Select(GetOptionButton).ToList(), 50, rowSpan, 90);
+                .Select(x => GetOptionButton(x, getApp)).ToList(), 50, rowSpan, 90);
             optionsTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10));
             var arrowButtons = GetArrowButtons(optionsTable, rowSpan);
             optionsTable.AddControls(arrowButtons, 1, 0);
@@ -92,6 +95,6 @@ namespace TravelPlanner.UserInterface
         }
 
         protected abstract List<Button> GetButtons();
-        protected abstract Button GetOptionButton(TOption option);
+        protected abstract Button GetOptionButton(TOption option, Func<IApplication> getApp=null);
     }
 }

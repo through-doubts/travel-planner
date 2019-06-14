@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using TravelPlanner.Application;
@@ -14,7 +15,7 @@ namespace TravelPlanner.UserInterface
         private readonly TravelEventFormFactory travelEventFormFactory;
 
         public PathForm(IApplication app, TravelEventFormFactory travelEventFormFactory) : 
-            base(app.UserSessionHandler.CurrentTravelEvents.GetItems)
+            base(app.UserSessionHandler.CurrentTravelEvents.GetItems, () => app)
         {
             this.app = app;
             this.travelEventFormFactory = travelEventFormFactory;
@@ -82,7 +83,7 @@ namespace TravelPlanner.UserInterface
             };
         }
 
-        protected override Button GetOptionButton(ITravelEvent option)
+        protected override Button GetOptionButton(ITravelEvent option, Func<IApplication> getApp = null)
         {
             return GetTravelEventButton(option);
         }

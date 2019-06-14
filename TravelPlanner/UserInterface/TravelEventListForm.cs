@@ -13,7 +13,7 @@ namespace TravelPlanner.UserInterface
         private readonly IApplication app;
 
         public TravelEventListForm(Func<List<ITravelEvent>> getOptions, string text,
-            IApplication app) : base(getOptions)
+            IApplication app) : base(getOptions, () => app)
         {
             this.app = app;
             Text = text;
@@ -28,7 +28,7 @@ namespace TravelPlanner.UserInterface
             };
         }
 
-        protected override Button GetOptionButton(ITravelEvent option)
+        protected override Button GetOptionButton(ITravelEvent option, Func<IApplication> getApp = null)
         {
             return Elements.GetButton(option.ToStringValue(), ((sender, args) =>
             {
